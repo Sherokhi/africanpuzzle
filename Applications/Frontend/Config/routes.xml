@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<routes>
+   <!-- page principal du site     -->
+   <!-- ************************** -->
+   <route url="/" module="Home" action="Index" />
+
+   <!-- Gallerie de photo          -->
+   <!-- ************************** -->
+   <route url="/gallery/filleuls" module="Gallery" action="filleuls" />
+   
+   <!-- Connection                 -->
+   <!-- ************************** -->
+   <route url="/login" module="Connection" action="login" />
+   <route url="/logout" module="Connection" action="logout" />
+   <route url="/signup" module="Connection" action="signup" />
+
+   <!-- Partie administration association  -->
+   <!-- ********************************** -->
+    <!-- <route url="/gestion" module="Gestion" action="index" /> -->
+   <route url="/gestion" module="User" action="index" />
+
+   <!--      Utilisateurs          -->
+   <!-- ************************** -->
+   <!--Route pour la page principale des utilisateurs-->
+   <route url="/user" module="User" action="index" />
+   <!--Route qui retourne la liste des utilisateurs-->
+   <route url="/user/view" module="User" action="view" />
+   
+   <!--Route qui retourne le modale de modification d'un utilisateur-->
+   <route url="/user/([0-9]+)/edit" module="User" action="edit" vars="id"/>
+   <!--Route qui submit la modification de l'utilisateur
+        les Paramètres sont envoyé par POST voir méthode submit_edit_user dans gestion.js -->
+    <route url="/user/submit_edit" module="User" action="submitEdit"/>
+
+   <!--Route qui retourne le modale d'ajout d'un utilisateur-->
+   <route url="/user/add" module="User" action="add" />
+   <!--Route qui submit l'ajout de l'utilisateur-->
+   <route url="/user/submit_add" module="User" action="submitAdd"/>
+    
+   <!--Route qui retourne le modale de suppression d'un utilisateur-->
+   <route url="/user/([0-9]+)/delete" module="User" action="delete" vars="id"/>
+   <!--Route qui submit la suppression d'un utilisateur-->
+   <route url="/user/([0-9]+)/submit_delete" module="User" action="submitDelete" vars="id"/>
+
+    <!--      Filleuls              -->
+    <!-- ************************** -->
+    <route url="/filleul" module="Filleul" action="index" />
+
+     <!-- filleul filtered -->
+     <route url="/filleul/filter" module="Filleul" action="filter" />
+
+     <!-- get filleul data -->
+     <route url="/filleul/([0-9]+)" module="Filleul" action="getPupilData" vars="idPupil"/>
+
+     <!-- add filleul -->
+     <route url="/filleul/add" module="Filleul" action="addPupil"/>
+
+     <!-- update filleul -->
+     <route url="/filleul/update" module="Filleul" action="updatePupil"/>
+
+     <!-- delete filleul -->
+     <route url="/filleul/delete" module="Filleul" action="deletePupil"/>
+
+
+</routes>

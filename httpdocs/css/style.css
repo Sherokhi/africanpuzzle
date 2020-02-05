@@ -1,0 +1,404 @@
+
+
+/*
+@Author: ThemeMascot
+@URL: http://ThemeMascot.com
+
+This is the file where you can add your custom styles to change the look of the
+theme. But don't modify style-main.css file.
+
+*/
+
+/* enlève le vu en vert lors de la validation dans un formulaire */
+.was-validated .form-control:valid, .form-control.is-valid {
+  background-image: none  !important;
+}
+
+
+/* change l'aspect des tooltip */
+.tooltip > .tooltip-inner {      background:#969696;max-width: 100% !important;}
+.tooltip.top .tooltip-arrow {    border-top-color: #0288d1;}
+.tooltip.right .tooltip-arrow {  border-right-color: #0288d1;}
+.tooltip.bottom .tooltip-arrow { border-bottom-color: #0288d1;}
+.tooltip.left .tooltip-arrow {   border-left-color: #0288d1;}
+
+/* sweetalert   */
+/* ------------ */
+/* on  modifie la couleur de fond */
+.bg-alert-warning-light {
+  background-color: #f3e7ca !important;
+}
+
+/* on centre les boutons dans le footer de l'alert */
+.swal-footer {
+  text-align: center !important;
+}
+/* ----------------*/
+/* FIN sweetalert  */
+
+
+/* pour les miniature utilisateur dasn la liste   */
+/* ------------ */
+.thumb_user48 {
+  width: 48px !important;
+  /* height: 48px !important; */
+}
+
+
+label.cabinet{
+	display: block;
+	cursor: pointer;
+}
+
+label.cabinet input.file{
+	position: relative;
+	height: 100%;
+	width: auto;
+	opacity: 0;
+	-moz-opacity: 0;
+  filter:progid:DXImageTransform.Microsoft.Alpha(opacity=0);
+  margin-top:-30px;
+}
+
+#upload-demo{
+	width: 250px;
+	height: 250px;
+  padding-bottom:25px;
+}
+figure figcaption {
+    position: absolute;
+    bottom: 0;
+    color: #fff;
+    width: 100%;
+    padding-left: 9px;
+    padding-bottom: 5px;
+    text-shadow: 0 0 10px #000;
+}
+
+/* Your custom css codes start here: */
+/* centered columns styles */
+.row-centered {
+  text-align:center;
+}
+.col-centered {
+  display:inline-block;
+  float:none;
+  /* reset the text-align */
+  text-align:left;
+  /* inline-block space fix */
+  margin-right:-4px;
+  text-align: center;
+  background-color: #ccc;
+  border: 1px solid #ddd;
+}
+
+.modal-header, .modal-footer {
+  border-color: #ff9800  ;
+  border-width: 3px;
+}
+
+body { 
+  opacity: 1 !important;
+}
+
+.sortable-handler { touch-action: none; }
+
+.texte_red_light {
+    color: #863d3d;
+}
+
+.mnuGestion.active,  .mnuGestion:hover > a, .mnuGestion:hover > li > a{
+  background: #036b07 !important; 
+  color: #fff;
+}
+
+
+
+/* lors du passage sur une icône bouton */
+.ico-crud {
+  position: relative;
+  z-index: 0;
+  display: inline-block;
+  padding: 5px;
+  border-radius: 4px;
+  list-style: none;
+  text-align: center;
+  font-weight: normal;
+  cursor: pointer; }
+
+.ico-crud:hover {
+  background-color: transparent;
+  color: #03A9F4;
+  transition: all .2s ease;
+  transform: scale(2); }
+
+/* couleur menu si Gestion du site */
+li.mnuGestion li:hover > a {
+  background: #036b07 !important; 
+  color: #fff;
+}
+
+/* dimension des photos dans la liste des fillieul */
+.filleul-thumb {
+  width: 45px !important;
+  height: 60px !important; }
+
+/* Utiliser dans la modal de connection */   
+.user_card {
+    height: 400px;
+    width: 400px;
+    margin-top: auto;
+    margin-bottom: auto;
+    background: #F26522;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    padding: 10px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    -webkit-box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    -moz-box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    border-radius: 5px;
+
+}
+.user_card_content {
+    background-color: #f5f2dac2;
+}
+
+.user_login {
+    width: 300px;
+}
+
+.brand_logo_container {
+    position: absolute;
+    height: 120px;
+    width: 120px;
+    top: -25px;
+    border-radius: 50%;
+    background: #60a3bc;
+    padding: 10px;
+    text-align: center;
+}
+.brand_logo {
+    height: 100px;
+    width: 150px;
+    border-radius: 50%;
+    border: 2px solid white;
+}
+.form_container {
+    margin-top: 100px;
+}
+.login_btn {
+    width: 100%;
+    background: #c0392b !important;
+    color: white !important;
+}
+.login_btn:focus {
+    box-shadow: none !important;
+    outline: 0px !important;
+}
+.login_container {
+    padding: 0 2rem;
+}
+.input-group-text {
+    background: #8a8686 !important;
+    color: white !important;
+    border: 0 !important;
+    border-radius: 0.25rem 0 0 0.25rem !important;
+}
+.input_user,
+.input_pass:focus {
+    box-shadow: none !important;
+    outline: 0px !important;
+}
+
+/*  checkbox dans la modal connection */
+.span_pseudo, .chiller_cb span:before, .chiller_cb span:after {
+    content: "";
+    display: inline-block;
+    background: #fff;
+    width: 0;
+    height: 0.2rem;
+    position: absolute;
+    transform-origin: 0% 0%;
+  }
+  
+  .chiller_cb {
+    position: relative;
+    height: 2rem;
+    display: flex;
+    align-items: center;
+  }
+  .chiller_cb input {
+    display: none;
+  }
+  .chiller_cb input:checked ~ span {
+    background: #fd2727;
+    border-color: #fd2727;
+  }
+  .chiller_cb input:checked ~ span:before {
+    width: 1rem;
+    height: 0.15rem;
+    transition: width 0.1s;
+    transition-delay: 0.3s;
+  }
+  .chiller_cb input:checked ~ span:after {
+    width: 0.4rem;
+    height: 0.15rem;
+    transition: width 0.1s;
+    transition-delay: 0.2s;
+  }
+  .chiller_cb input:disabled ~ span {
+    background: #ececec;
+    border-color: #dcdcdc;
+  }
+  .chiller_cb input:disabled ~ label {
+    color: #dcdcdc;
+  }
+  .chiller_cb input:disabled ~ label:hover {
+    cursor: default;
+  }
+  .chiller_cb label {
+    padding-left: 2rem;
+    position: relative;
+    z-index: 2;
+    cursor: pointer;
+    margin-bottom:0;
+  }
+  .chiller_cb span {
+    display: inline-block;
+    width: 1.2rem;
+    height: 1.2rem;
+    border: 2px solid #ccc;
+    position: absolute;
+    left: 0;
+    transition: all 0.2s;
+    z-index: 1;
+    box-sizing: content-box;
+  }
+  .chiller_cb span:before {
+    transform: rotate(-55deg);
+    top: 1rem;
+    left: 0.37rem;
+  }
+  .chiller_cb span:after {
+    transform: rotate(35deg);
+    bottom: 0.35rem;
+    left: 0.2rem;
+  }
+
+  /* .. checkbox dans la liste des utilisateurs */
+  #listUsers .checkbox * {
+    cursor: pointer;
+  }
+  #listUsers .checkbox {
+    padding-left: 20px;
+    width: 20px;
+    height: 20px;
+    margin-top: 1px;
+  }
+  
+  #listUsers .checkbox label {
+    display: inline-block;
+    vertical-align: middle;
+    position: relative;
+    padding-left: 5px;
+  }
+  
+  #listUsers .checkbox label::before {
+    content: "";
+    display: inline-block;
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    left: 0;
+    margin-left: -20px;
+    border: 1px solid #555;
+    border-radius: 3px;
+    background-color: #fff;
+    -webkit-transition: border 0.15s ease-in-out, color 0.15s ease-in-out;
+    -o-transition: border 0.15s ease-in-out, color 0.15s ease-in-out;
+    transition: border 0.15s ease-in-out, color 0.15s ease-in-out;
+  }
+  
+  #listUsers .checkbox label::after {
+    display: inline-block;
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    left: 0;
+    top: 2px;
+    margin-left: -21px;
+    padding-left: 3px;
+    padding-top: 1px;
+    font-size: 11px;
+    color: #555555;
+  }
+  
+  #listUsers .checkbox input[type="checkbox"]{
+    opacity: 0;
+    z-index: 1;
+    width: 20px;
+    height: 20px;
+  }
+  
+  
+  #listUsers .checkbox input[type="checkbox"]:checked + label::after{
+    font-family: "FontAwesome";
+    content: "\f00c";
+  }
+  
+  #listUsers .checkbox.checkbox-circle label::before {
+    border-radius: 50%;
+  }
+  
+  #listUsers .checkbox.checkbox-inline {
+    margin-top: 0;
+  }
+  
+  #listUsers .checkbox-red    input[type="checkbox"]:checked + label::after,
+  #listUsers .checkbox-yellow input[type="checkbox"]:checked + label::after,
+  #listUsers .checkbox-green  input[type="checkbox"]:checked + label::after,
+  #listUsers .checkbox-blue   input[type="checkbox"]:checked + label::after,
+  #listUsers .checkbox-black  input[type="checkbox"]:checked + label::after
+  {color: #fff;}
+  
+  #listUsers .checkbox-red input[type="checkbox"] + label::before
+  {background-color: #990000;  border-color: #990000;}
+  
+  #listUsers .checkbox-yellow input[type="checkbox"] + label::before
+  {background-color: #face00;  border-color: #face00;}
+  
+  #listUsers .checkbox-green input[type="checkbox"] + label::before
+  {background-color: #008000;  border-color: #008000;}
+  
+  #listUsers .checkbox-blue input[type="checkbox"] + label::before
+  {background-color: #428bca;  border-color: #428bca;}
+  
+  #listUsers .checkbox-black input[type="checkbox"] + label::before
+  {background-color: #000000;  border-color: #000000;}
+  
+  input[type="checkbox"].styled:checked + label:after {
+    font-family: 'FontAwesome';
+    content: "\f00c";
+  }
+
+/* repris de bootstrap 4 */ 
+.justify-content-center {
+    -ms-flex-pack: center!important;
+    justify-content: center!important;
+}
+.d-flex {
+    display: -ms-flexbox!important;
+    display: flex!important;
+}
+
+.alert .alert-icon-col {
+  min-width: 40px;
+  max-width: 40px;
+}
+
+.alert-link {
+  /* i find 700 to bold */
+  font-weight: 600;
+}
