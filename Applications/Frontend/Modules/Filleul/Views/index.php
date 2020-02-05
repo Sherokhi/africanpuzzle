@@ -19,6 +19,13 @@
 ?>
 
 
+<!--  ------------------------------------------------------------------------------
+     modal PoPup pour :
+            - modification, ajout et suppression d'un filleul 
+            voir les méthodes dans gestion.js
+------------------------------------------------------------------------------------  -->
+<div id="pupil-modal" class="modal fade " role="dialog" data-toggle="modal"></div>
+
 <!-- section: filtre utilisateur -->
 <section class="section-filter-user">
     <div class="container-fluid pb-0">
@@ -31,7 +38,7 @@
 					<div class="col-md-1">
 						<div class="counter">
 						  <i class="fas fa-graduation-cap fa-2x text-warning"></i>
-						  <h3 class="timer count-title count-number" data-to="100" data-speed="1500"><?= $totByFiliation[FIL_PRIMAIRE] ?></h3>
+						  <h3 class="timer count-title count-number" data-to="100" data-speed="1500"><?= $totByFiliation[FIL_PRIMAIRE]["tot_by_filiation"] ?></h3>
 						  <p class="count-text ">Primaire</p>
 						</div>
                     </div>
@@ -39,7 +46,7 @@
                     <div class="col-md-1">
 					   <div class="counter">
 						  <i class="fas fa-user-graduate fa-2x text-warning"></i>
-						  <h3 class="timer count-title count-number" data-to="1700" data-speed="1500"><?= $totByFiliation[FIL_SECONDAIRE] ?></h3>
+						  <h3 class="timer count-title count-number" data-to="1700" data-speed="1500"><?= $totByFiliation[FIL_SECONDAIRE]["tot_by_filiation"] ?></h3>
 						  <p class="count-text ">Secondaire</p>
 						</div>
                     </div>
@@ -67,7 +74,7 @@
                     
                     <div class="col-md-4 text-center">
                     <h2>Ajouter</h2>
-                    <p><button type="button" class="btn btn-success" onclick="setPupil('', 1)" >+</button></p>
+                    <p><button type="button" class="btn btn-success" onclick="add_pupil()" >+</button></p>
                     </div> 
 													  								
                 </div>
@@ -76,43 +83,43 @@
 
             <!-- Filtre-->
             <div class="cardbox-body">
-                <div class="row">
-                    <div class="col-md-2 offset-md-1">
-                        <div class="form-group">
-                            <div class="input-group">
-                                <input id="searchPupil" class="form-control" type="text" placeholder="Recherche ..." name="search" onchange="filter_Filleul(<?= date('Y') ?>, 1)">
-                                <span class="input-group-text" >
-                                    <i class="ion-search" data-pack="default"></i>
-                                </span>
-                            </div>
-                        </div>                 
-                    </div>
+                <form id="searchPupilForm">
+                    <div class="row">
+                        <div class="col-md-2 offset-md-1">
+                            <div class="form-group">
+                                <div class="input-group">
+                                    <input id="searchPupil" class="form-control" type="text" placeholder="Recherche ..." name="search" onchange="filter_Filleul(<?= date('Y') ?>, 1)">
+                                    <span class="input-group-text" >
+                                        <i class="ion-search" data-pack="default"></i>
+                                    </span>
+                                </div>
+                            </div>                 
+                        </div>
 
-                    <div class="col-md-2">
-                        <div class="form-group">                                                               
-                            <div class="input-group">
-                                <input id="agePupil" class="form-control" type="text" placeholder="Age ..." name="age" onchange="filter_Filleul(<?= date('Y') ?>, 1)">
-                                <span class="input-group-text" >
-                                    <i class="ion-search" data-pack="default"></i>
-                                </span>
-                            </div>
-                        </div>                 
-                    </div>
-                        
-                    <div class="col-md-2 offset-md-1">
-                        <label class="switch switch-warning">
-                            <input type="checkbox"  id="chk-is-giver" checked="checked" onclick="filter_Filleul(<?= date('Y') ?>, 1)"><span></span>
-                        </label>Privé                    
-                    </div>  
+                        <div class="col-md-2">
+                            <div class="form-group">                                                               
+                                <div class="input-group">
+                                    <input id="agePupil" class="form-control" type="text" placeholder="Age ..." name="age" onchange="filter_Filleul(<?= date('Y') ?>, 1)">
+                                    <span class="input-group-text" >
+                                        <i class="ion-search" data-pack="default"></i>
+                                    </span>
+                                </div>
+                            </div>                 
+                        </div>
+                            
+                        <div class="col-md-2 offset-md-1">
+                            <label class="switch switch-warning">
+                                <input type="checkbox"  id="chk-is-prive" checked="checked" name="prive" onclick="filter_Filleul(<?= date('Y') ?>, 1)"><span></span>
+                            </label>Privé                    
+                        </div>  
 
-                    <div class="col-md-2">
-                        <label class="switch switch-warning">
-                            <input type="checkbox" id="chk-is-incommittee" checked="checked" onclick="filter_Filleul(<?= date('Y') ?>, 1)"><span></span>
-                        </label>Public                    
-                    </div>
-
-                                                       
-                </div>            
+                        <div class="col-md-2">
+                            <label class="switch switch-warning">
+                                <input type="checkbox" id="chk-is-public" checked="checked" name="public" onclick="filter_Filleul(<?= date('Y') ?>, 1)"><span></span>
+                            </label>Public                    
+                        </div>
+                    </div>            
+                </form>
             </div>
         </div>
     </div>
