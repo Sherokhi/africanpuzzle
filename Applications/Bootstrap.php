@@ -127,8 +127,8 @@ define ('GRP_MEMBRE',   '5');
 /* Définition des filiations
    Attention doit être identique à ce qui se trouve dans 
    la table t_filiation de la base de données */
-define ('FIL_PRIMAIRE',   '1'); 
-define ('FIL_SECONDAIRE',   '2');
+define ('FIL_PRIMAIRE',   '0'); 
+define ('FIL_SECONDAIRE',   '1');
  	
 
 /* Définition des  rôles d'étudiants (tables roles */

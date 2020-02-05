@@ -81,6 +81,7 @@ class FilleulController extends BackController
     // Execute the filters and sends the html data to the ajax function to update the page
     public function executeFilter(HTTPRequest $request)
     {
+
         if($request->postExists('search'))
         {
             $search = $request->postData('search');
@@ -148,13 +149,13 @@ class FilleulController extends BackController
 
                 $pupils[$key]['chiBirthDate'] = $chiAge;
             }
+
             // Pupils list
             $this->page->addVar('pupils', $pupils);
 
             // Filiations names
             $this->page->addVar('filiations', $filiations);
         }
-        
 
         // Do not use the template, only send $content
         $this->page->setLayout();
@@ -177,9 +178,24 @@ class FilleulController extends BackController
         $pupilData = $this->managers->getManagerOf('Filleul')->getPupilData($idPupil);
         die(json_encode($pupilData));
     }
+    // Add display to submit a pupil
+    function executeAddPupil(HTTPRequest $request) {
+
+        $errors = array();
+
+        /* on vérifie qu'on a les bons droits .. c'est à dire qu'on fait partie du comité */
+        if (!($this->app->user()->isAuthenticated() and ($this->app->user()->getAttribute('isInCD')))){
+            
+            $errors[0]="Vous nêtes pas autorisé à accéder à cette page !";
+            $this->app->user()->setFlash($errors,'danger','Droits ');
+            $this->app->httpResponse()->redirect($request->httpReferer());
+        }  
+            /* on affiche la page add.php  dans une popup modal */
+            $this->page->setLayout();
+    }
 
     // Add a pupil to the database
-    public function executeAddPupil(HTTPRequest $request)
+    public function executeAddSubmitPupil(HTTPRequest $request)
     {
         if($request->postExists('name'))
         {
