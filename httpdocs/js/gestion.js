@@ -37,7 +37,8 @@ function filter_Filleul(year, filtered)
         // Set all pupil query
         var search = "";
         var birthYear = "";
-        var buiState = "0 OR 1";
+        var buiState = 'undefined';
+        // var buiState = "0 OR 1";
         
         $.ajax({
             type : "POST",
@@ -62,8 +63,17 @@ function filter_Filleul(year, filtered)
         var search = filter[0].value;
         var age = Number(filter[1].value);
         var birthYear = year - age;
-        var optradio = filter[2].value;
         var buiState = 0;
+        var skip = true;
+        if (typeof filter[3] !== 'undefined') {
+            optradio = 'all';
+            skip = false;
+
+        } else if(typeof filter[2] !== 'undefined'){
+            optradio = filter[2].name;            
+            skip = false;
+        }
+
         switch(optradio)
         {
             case "private" :
@@ -99,11 +109,11 @@ function filter_Filleul(year, filtered)
         {
             buiState = "0 OR 1";
         }
-
+        
         $.ajax({
             type : "POST",
             dataType : "html",
-            url : "pupil/filter",
+            url : "filleul/filter",
             data : 
                 {
                     "search" : search,
@@ -111,6 +121,9 @@ function filter_Filleul(year, filtered)
                     "buiState" : buiState
                 }
         }).done(function(data){
+            if(skip){
+                data = null;
+            }
                 $("#pupilContent").html(data);
         });
     }  
@@ -476,6 +489,28 @@ function submit_delete_user(id){
     
 }
 
+/* --------------------------------------------------------
+ * *** 					add_pupil        		    	 ***
+ * ---------------------------------------------------------
+ * ETML
+ * Auteur 		    : Dimitrios Lymberis
+ * Date 		    : 02.06.2019
+ * Description 		: Ajout d'un utilisateur
+ *                    le contenu html de la page add.php 
+ *                    du module user s'insère dans 
+ *                    la modal popup d'ajout
+ * -------------------------------------------------------- */
+function add_pupil(){
+    $('#pupil-modal').html(null);
+    $.ajax({
+        url:'filleul/add',
+        dataType:'html',
+    }).done(function(html){
+        $('#pupil-modal').append(html);
+        $('#pupil-modal').modal("show");
+    });
+}
+
 
 function filter_user(tooltipShow=true){
     
@@ -622,5 +657,3 @@ $('.usrPhoto-rotate').on('click', function(ev) {
     console.log(parseInt($(this).data('deg')));
     $uploadCrop.croppie('rotate', parseInt($(this).data('deg')));
 });
-
-
