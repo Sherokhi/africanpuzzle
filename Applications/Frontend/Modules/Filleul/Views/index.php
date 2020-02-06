@@ -11,14 +11,6 @@
  **********************************************************************************/
 ?>
 
-<?php
-    //Includes the modal that allows the secretary to add or modify a pupil
-    include ('modAddUpdatePupil.php');
-    //Includes the modal that allows the secretary to comment the profile of a pupil
-    include ('modCommentPupil.php');
-?>
-
-
 <!--  ------------------------------------------------------------------------------
      modal PoPup pour :
             - modification, ajout et suppression d'un filleul 
