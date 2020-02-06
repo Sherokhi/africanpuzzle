@@ -179,8 +179,7 @@ class FilleulController extends BackController
         die(json_encode($pupilData));
     }
     // Add display to submit a pupil
-    function executeAddPupil(HTTPRequest $request) {
-
+    function executeAddUpdate(HTTPRequest $request) {
         $errors = array();
 
         /* on vérifie qu'on a les bons droits .. c'est à dire qu'on fait partie du comité */
@@ -195,88 +194,112 @@ class FilleulController extends BackController
     }
 
     // Add a pupil to the database
-    public function executeAddSubmitPupil(HTTPRequest $request)
+    public function executeAddSubmit(HTTPRequest $request)
     {
-        if($request->postExists('name'))
-        {
-            $name = $request->postData('name');
-        }
-        else
-        {
-            $name = "";
+        
+        // $errors = array();
+        // /* on vérifie qu'on a les bons droits .. c'est à dire qu'on fait partie du comité */
+        // if (!($this->app->user()->isAuthenticated() and ($this->app->user()->getAttribute('isInCD')))){
+            
+        //     $errors[0]="Vous nêtes pas autorisé à accéder à cette page !";
+        //     $this->app->user()->setFlash($errors,'danger','Droits ');
+        //     $this->app->httpResponse()->redirect($request->httpReferer());
+        // }
+
+        // le retour de l'appel Ajax
+        // $results=[];
+        // $results['msgErr']='';
+        // $results['msgTitle']='';
+        if ((isset($_POST["pupilData"]))){
+            $pupilData =  $_POST["pupilData"];
+        
+            $error = array_values($pupilData);
+            throw new Exception($error);
+            if (isset($_POST["pupilPhoto"]))
+            {
+            }
         }
 
-        if($request->postExists('firstName'))
-        {
-            $firstName = $request->postData('firstName');
-        }
-        else
-        {
-            $firstName = "";
-        }
+        // if($request->postExists('name'))
+        // {
+        //     $name = $request->postData('name');
+        // }
+        // else
+        // {
+        //     $name = "";
+        // }
 
-        if($request->postExists('address'))
-        {
-            $address = $request->postData('address');
-        }
-        else
-        {
-            $address = "";
-        }
+        // if($request->postExists('firstName'))
+        // {
+        //     $firstName = $request->postData('firstName');
+        // }
+        // else
+        // {
+        //     $firstName = "";
+        // }
 
-        if($request->postExists('parentsName'))
-        {
-            $parentsName = $request->postData('parentsName');
-        }
-        else
-        {
-            $parentsName = "";
-        }
+        // if($request->postExists('address'))
+        // {
+        //     $address = $request->postData('address');
+        // }
+        // else
+        // {
+        //     $address = "";
+        // }
 
-        if($request->postExists('birthDate'))
-        {
-            $birthDate = $request->postData('birthDate');
-        }
-        else
-        {
-            $birthDate = "";
-        }
+        // if($request->postExists('parentsName'))
+        // {
+        //     $parentsName = $request->postData('parentsName');
+        // }
+        // else
+        // {
+        //     $parentsName = "";
+        // }
 
-        if($request->postExists('sponsor'))
-        {
-            $sponsor = $request->postData('sponsor');
-        }
-        else
-        {
-            $sponsor = "";
-        }
+        // if($request->postExists('birthDate'))
+        // {
+        //     $birthDate = $request->postData('birthDate');
+        // }
+        // else
+        // {
+        //     $birthDate = "";
+        // }
 
-        if($request->postExists('building'))
-        {
-            $building = $request->postData('building');
-        }
-        else
-        {
-            $building = "";
-        }
+        // if($request->postExists('sponsor'))
+        // {
+        //     $sponsor = $request->postData('sponsor');
+        // }
+        // else
+        // {
+        //     $sponsor = "";
+        // }
 
-        if($request->postExists('filiation'))
-        {
-            $filiation = $request->postData('filiation');
-        }
-        else
-        {
-            $filiation = "";
-        }
+        // if($request->postExists('building'))
+        // {
+        //     $building = $request->postData('building');
+        // }
+        // else
+        // {
+        //     $building = "";
+        // }
 
-        if($request->postExists('training'))
-        {
-            $training = $request->postData('training');
-        }
-        else
-        {
-            $training = "";
-        }
+        // if($request->postExists('filiation'))
+        // {
+        //     $filiation = $request->postData('filiation');
+        // }
+        // else
+        // {
+        //     $filiation = "";
+        // }
+
+        // if($request->postExists('training'))
+        // {
+        //     $training = $request->postData('training');
+        // }
+        // else
+        // {
+        //     $training = "";
+        // }
 
         // Add the pupil to the database
         $this->managers->getManagerOf('Filleul')->addPupil($name, $firstName, $address, $parentsName, $birthDate, $building, $filiation, $training, $sponsor);
