@@ -53,7 +53,10 @@
      <route url="/filleul/([0-9]+)" module="Filleul" action="getPupilData" vars="idPupil"/>
 
      <!-- add filleul -->
-     <route url="/filleul/add" module="Filleul" action="addPupil"/>
+     <route url="/filleul/add" module="Filleul" action="addUpdate"/>
+     
+     <!-- add filleul submit -->
+     <route url="/filleul/submit_add" module="Filleul" action="addSubmit"/>
 
      <!-- update filleul -->
      <route url="/filleul/update" module="Filleul" action="updatePupil"/>
