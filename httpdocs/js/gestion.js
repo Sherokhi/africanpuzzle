@@ -493,14 +493,15 @@ function submit_delete_user(id){
  * *** 					add_pupil        		    	 ***
  * ---------------------------------------------------------
  * ETML
- * Auteur 		    : Dimitrios Lymberis
- * Date 		    : 02.06.2019
- * Description 		: Ajout d'un utilisateur
+ * Auteur 		    : Jérémie Perret
+ * Date 		    : 06.02.2020
+ * Description 		: Ajout d'un filleul
  *                    le contenu html de la page add.php 
  *                    du module user s'insère dans 
  *                    la modal popup d'ajout
  * -------------------------------------------------------- */
 function add_pupil(){
+
     $('#pupil-modal').html(null);
     $.ajax({
         url:'filleul/add',
@@ -511,6 +512,81 @@ function add_pupil(){
     });
 }
 
+/* ---------------------------------------------------------
+ * *** 			  submit_add_pupil        		    	 ***
+ * ---------------------------------------------------------
+ * ETML
+ * Auteur 		    : Jérémie Perret
+ * Date 		    : 06.02.2020
+ * Description 		: s'enclenche depuis le bouton d'ajout
+ *                    de la modal popup ajout d'un utilisateur
+ * -------------------------------------------------------- */
+function submit_add_pupil(){
+
+    // Fetch form to apply custom Bootstrap validation
+    var form = $("#addUpdatePupil");
+    
+    // if (form[0].checkValidity() === false) {
+    //   event.preventDefault();
+    //   event.stopPropagation();
+    //   form.addClass('was-validated');
+    // }
+    // else{
+    
+    
+            // on récupère les données du formulaire d'ajout
+            var pupilFormData = $('#addUpdatePupil').serializeArray();
+    
+            var pupilData = {};
+    
+            //on transforme les données du formulaire en un tableau associatif (json)
+            pupilFormData.forEach(function(element) {
+                pupilData[element.name]=element.value;
+            });
+    
+            // on récupère la photo au format "binaire"  
+            var pupilPhoto =$('#item-img-output').attr('src');   
+    
+            // console.log(pupilData);
+            // console.log(pupilPhoto);
+            $.ajax({
+                type:"POST",
+                url:"filleul/submit_add",
+                dataType:'json',
+                data : 
+                {
+                    'pupilData' : JSON.stringify(pupilData),
+                    'puplPhoto' : pupilPhoto
+                },
+            }).done(function(data){
+    
+            
+                console.log(data);
+                // on vérifie qu'il n'y a pas d'erreurs
+                if ((!data.msgErr == ''))
+                    {
+                        Swal.fire(data.msgTitle, data.msgErr, 'error');
+                        
+                        return;
+                    }
+                    else{
+                        console.log(pupilData);
+                        $('#user-modal').modal("hide");
+                        filter_user(false);
+                        Swal.fire('Ajout!', "<p> Le filleul <em><strong class='text-warning'>"+ pupilData['name']  + " " + pupilData['firstName'] + "</strong></em> a bien été ajouté !</p>", 'success');
+      
+                        update_count(data.nbreParrainage,data.nbreMembre);
+                        
+                    }
+                    
+                
+            }).fail(function (jqXHR, textStatus) {
+                Swal.fire('ERREUR!', textStatus, 'error');
+            });  
+    
+        // }
+    
+    }
 
 function filter_user(tooltipShow=true){
     
