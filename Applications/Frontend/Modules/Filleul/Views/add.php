@@ -91,7 +91,7 @@
                             <div class="col-lg-10">
                                 <select class="form-control" name="sponsor" id="pupilAddUpdateModalSponsor">
                                     <option value="NULL">Aucun</option>
-                                    <?php foreach($userList as $user) {
+                                    <?php foreach($users as $user) {
                                         ?>
                                         <option value="<?php echo($user->idUser()); ?>"><?php echo ($user->useName()." ".$user->useFirstName()); ?></option>
 
@@ -105,8 +105,10 @@
                             <label class="col-lg-2 col-form-label">Bâtiment</label>
                             <div class="col-lg-10">
                                 <select class="form-control" name="building" id="pupilAddUpdateModalBuilding">
-                                    <option value="1">Public</option>
-                                    <option value="2">Privé</option>
+                                    <?php foreach($buildings as $building) {
+                                        ?>
+                                        <option value="<?php echo($building['idBuilding']); ?>"><?php echo ($building['buiName']); ?></option>
+                                    <?php } ?>
                                 </select>
                             </div>
                         </div>
@@ -116,8 +118,10 @@
                             <label class="col-lg-2 col-form-label">Filière</label>
                             <div class="col-lg-10">
                                 <select class="form-control" name="filiation" id="pupilAddUpdateModalFiliation">
-                                    <option value="1">Primaire</option>
-                                    <option value="2">Secondaire</option>
+                                    <?php foreach($filiations as $filiation) {
+                                        ?>
+                                        <option value="<?php echo($filiation['idFiliation']); ?>"><?php echo ($filiation['filName']); ?></option>
+                                    <?php } ?>
                                 </select>
                             </div>
                         </div>
@@ -127,8 +131,10 @@
                             <label class="col-lg-2 col-form-label">Formation</label>
                             <div class="col-lg-10">
                                 <select class="form-control" name="training" id="pupilAddUpdateModalTraining">
-                                    <option value="1">Année 2019 à 60.-</option>
-                                    <option value="3">Année 2019 à 75.-</option>
+                                    <?php foreach($trainings as $training) {
+                                        ?>
+                                        <option value="<?php echo($training['idTraining']); ?>"><?php echo ("Année ".$training['traYear'].' à '.$training['traCost']); ?></option>
+                                    <?php } ?>
                                 </select>
                             </div>
                         </div>

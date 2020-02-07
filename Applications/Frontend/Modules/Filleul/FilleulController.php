@@ -191,8 +191,15 @@ class FilleulController extends BackController
             $this->app->httpResponse()->redirect($request->httpReferer());
         }
         $users = $this->managers->getManagerOf('User')->getList();
-        $this->page->addVar('userList', $users);
-            /* on affiche la page add.php  dans une popup modal */
+        $filiations = $this->managers->getManagerOf('Filiation')->getList();
+        $trainings = $this->managers->getManagerOf('Training')->getList();
+        $buildings = $this->managers->getManagerOf('Building')->getList();
+        $this->page->addVar('users', $users);
+        $this->page->addVar('filiations', $filiations);
+        $this->page->addVar('trainings', $trainings);
+        $this->page->addVar('buildings', $buildings);
+
+        /* on affiche la page add.php  dans une popup modal */
             $this->page->setLayout();
     }
 
