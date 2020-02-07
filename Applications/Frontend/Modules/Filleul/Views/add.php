@@ -20,6 +20,29 @@
                 <form method="post" id="addUpdatePupil">
                     <input type="hidden" name="id" id="pupilAddUpdateModalId" value="">
                     <fieldset>
+                                <!-- section: Photo --> 
+                        <div class="row">
+                            <div class="col-4 offset-4">
+                                <label class="cabinet center-block">
+                                <figure>
+                                    <img name="pupilPhoto-rotate" src="<?php echo $this->html()->url(IMAGES_FOLDER.'no_photo.png'); ?>" class="gambar img-responsive img-thumbnail" id="item-img-output" />
+                                </figure>
+                                <input type="file" class="item-img file center-block " name="uploadPupilPhoto" id="uploadPupilPhoto"/>
+                                </label>
+                            </div>        
+                        </div>
+                        <!-- <div class="form-group row">
+                            <label class="col-lg-2 col-form-label">Photo</label>
+                            <div class="col-lg-10">
+                                <div class="custom-file">
+                                    <input class="custom-file-input" id="item-img-output" type="file" name="picture"
+                                        id="pupilAddUpdateModalPicture">
+                                    <label class="custom-file-label" for="customFile">Sélectionner une photo</label>
+                                </div>
+                            </div>
+                        </div> -->
+                    </fieldset>
+                    <fieldset>
                         <div class="form-group row">
                             <label class="col-lg-2 col-form-label">Nom</label>
                             <div class="col-lg-10">
@@ -75,25 +98,15 @@
                     </fieldset>
                     <fieldset>
                         <div class="form-group row">
-                            <label class="col-lg-2 col-form-label">Photo</label>
-                            <div class="col-lg-10">
-                                <div class="custom-file">
-                                    <input class="custom-file-input" id="item-img-output" type="file" name="picture"
-                                        id="pupilAddUpdateModalPicture">
-                                    <label class="custom-file-label" for="customFile">Sélectionner une photo</label>
-                                </div>
-                            </div>
-                        </div>
-                    </fieldset>
-                    <fieldset>
-                        <div class="form-group row">
                             <label class="col-lg-2 col-form-label">Parrain</label>
                             <div class="col-lg-10">
                                 <select class="form-control" name="sponsor" id="pupilAddUpdateModalSponsor">
                                     <option value="NULL">Aucun</option>
-                                    <option value="1">Pache Sam</option>
-                                    <option value="3">Jaccard Cécile</option>
-                                    <option value="4">Bovet Johanne</option>
+                                    <?php foreach($userList as $user) {
+                                        ?>
+                                        <option value="<?php $user->id(); ?>"><?php $user->name(); ?> <?php $user->firstName(); ?></option>
+
+                                    <?php } ?>
                                 </select>
                             </div>
                         </div>

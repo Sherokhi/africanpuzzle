@@ -178,8 +178,9 @@ class FilleulController extends BackController
         $pupilData = $this->managers->getManagerOf('Filleul')->getPupilData($idPupil);
         die(json_encode($pupilData));
     }
+
     // Add display to submit a pupil
-    function executeAddUpdate(HTTPRequest $request) {
+    function executeAdd(HTTPRequest $request) {
         $errors = array();
 
         /* on vérifie qu'on a les bons droits .. c'est à dire qu'on fait partie du comité */
@@ -188,7 +189,9 @@ class FilleulController extends BackController
             $errors[0]="Vous nêtes pas autorisé à accéder à cette page !";
             $this->app->user()->setFlash($errors,'danger','Droits ');
             $this->app->httpResponse()->redirect($request->httpReferer());
-        }  
+        }
+        $users = $this->managers->getManagerOf('User')->getList();
+        $this->page->addVar('userList', $users);
             /* on affiche la page add.php  dans une popup modal */
             $this->page->setLayout();
     }
@@ -212,11 +215,30 @@ class FilleulController extends BackController
         $results['msgTitle']='';
         
         
-        if (($request->postExists("pupilData"))){
+        if ($request->postExists("pupilData")){
             $pupilData =  json_decode($request->postData("pupilData"));
-        
-            if (isset($_POST["pupilPhoto"]))
+            $photoName = "x";
+            if ($request->postExists('pupilPhoto'))
             {
+                $pupilPhoto = $request->postData('pupilPhoto');
+                if( substr($pupilPhoto, 0, 4) !=="http"){
+
+                    $dataPhoto = $pupilPhoto;
+
+                    $image_array_1 = explode(";", $dataPhoto);
+
+                    $image_array_2 = explode(",", $image_array_1[1]);
+
+                    $dataPhoto = base64_decode($image_array_2[1]);
+
+                    $photoName = time() . '.png';
+                    if ($photoName!=null){
+
+                        //on place la photo dans le répertoire des utilisateurs
+                        file_put_contents(IMAGES_FOLDER.FOLDER_IMG_FILLEUL.$photoName, $dataPhoto);
+                    }
+                }
+
             }
             if(isset($pupilData->name))
             {
@@ -245,9 +267,9 @@ class FilleulController extends BackController
                 $address = "";
             }
 
-            if(isset($pupilData->parentsName))
+            if(isset($pupilData->dadsName, $pupilData->mothersName))
             {
-                $parentsName = $pupilData->parentsName;
+                $parentsName = $pupilData->dadsName.';'.$pupilData->mothersName;
             }
             else
             {
@@ -299,10 +321,10 @@ class FilleulController extends BackController
                 $training = "";
             }
             // Add the pupil to the database
-            $this->managers->getManagerOf('Filleul')->addPupil($name, $firstName, $address, $parentsName, $birthDate, $building, $filiation, $training, $sponsor);
-            die(true);
+            $this->managers->getManagerOf('Filleul')->addPupil($name, $firstName, $address, $parentsName, $birthDate, $photoName,$building, $filiation, $training, $sponsor);
         }
-        
+
+        die(true);
     }
 
     // Update a pupil in the database

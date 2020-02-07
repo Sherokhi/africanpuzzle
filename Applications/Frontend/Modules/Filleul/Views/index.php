@@ -18,6 +18,50 @@
 ------------------------------------------------------------------------------------  -->
 <div id="pupil-modal" class="modal fade " role="dialog" data-toggle="modal"></div>
 
+
+<!--  ------------------------------------------------------------------------------
+     modal PoPup pour : http://www.croppic.net/ ou https://foliotek.github.io/Croppie/
+            - edition rognage de la photo d'utilisateur cette popup modal s'affiche lors 
+            du click sur la photo dans la modal d'ajout d'utilisateur 
+            voir les méthodes dans gestion.js
+------------------------------------------------------------------------------------  -->
+<div class="modal fade" id="cropImagePupil" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="mt-0 modal-title">Editer la photo</h5>
+        <button class="close" type="button" data-dismiss="modal" aria-label="Close"><span>×</span></button>
+          
+      </div>
+      <div class="modal-body">
+      <div class="row">
+		<div class="col-8">
+            <div id="upload-pupil-photo" ></div>
+        </div>
+        <div class="col-4">
+            <div class="cardbox">
+                <div class="cardbox-heading">
+                    <div>Rotation</div>
+                </div>
+                <div class="cardbox-body">
+                    <div class="text-center">
+                        <button class="btn btn-circle btn-secondary pupilPhoto-rotate" data-deg="90" type="button" title="rotation de -90"><i class="fas fa-undo"></i></button>
+                        &nbsp;
+                        <button class="btn btn-circle btn-secondary pupilPhoto-rotate" data-deg="-90" type="button" title="rotation de +90"><i class="fas fa-undo fa-flip-horizontal"></i></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>      
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Fermer</button>
+        <button type="button" id="cropImagePupil" class="btn btn-primary">Rogner</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <!-- section: filtre utilisateur -->
 <section class="section-filter-user">
     <div class="container-fluid pb-0">
