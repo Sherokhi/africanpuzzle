@@ -1,5 +1,5 @@
 <!--********************************************************************************
- * Name:    modAddUpdatePupil.php
+ * Name:    add.php
  * Author:  Sam Pache
  * Date:    09.05.2019
  * Goal:    This page contains the modal to update or add a pupil
@@ -15,12 +15,11 @@
 
         <!-- Modal body -->
         <div class="modal-body">
-            <!--<p class="text-intro">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Minima maxime quam architecto quo inventore harum ex magni, dicta impedit.</p>-->
             <div class="form-div">
                 <form method="post" id="addUpdatePupil">
                     <input type="hidden" name="id" id="pupilAddUpdateModalId" value="">
                     <fieldset>
-                                <!-- section: Photo --> 
+                        <!-- section: Photo -->
                         <div class="row">
                             <div class="col-4 offset-4">
                                 <label class="cabinet center-block">
@@ -31,16 +30,6 @@
                                 </label>
                             </div>        
                         </div>
-                        <!-- <div class="form-group row">
-                            <label class="col-lg-2 col-form-label">Photo</label>
-                            <div class="col-lg-10">
-                                <div class="custom-file">
-                                    <input class="custom-file-input" id="item-img-output" type="file" name="picture"
-                                        id="pupilAddUpdateModalPicture">
-                                    <label class="custom-file-label" for="customFile">Sélectionner une photo</label>
-                                </div>
-                            </div>
-                        </div> -->
                     </fieldset>
                     <fieldset>
                         <div class="form-group row">
