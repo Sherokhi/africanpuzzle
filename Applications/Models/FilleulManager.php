@@ -15,7 +15,7 @@ abstract class FilleulManager extends Manager
     abstract function getList();
     abstract function filterList($search, $birthYear, $buiState);
     abstract function getPupilData($idPupil);
-    abstract function addPupil($name, $firstName, $address, $parentsNames, $birthDate, $building, $filiation, $training, $sponsor);
+    abstract function addPupil($name, $firstName, $address, $parentsNames, $birthDate, $pictureName, $building, $filiation, $training, $sponsor);
     abstract function updatePupil($id, $name, $firstName, $address, $parentsNames, $birthDate, $building, $filiation, $training, $sponsor);
     abstract function deletePupil($idPupil);
 }

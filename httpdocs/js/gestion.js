@@ -493,14 +493,15 @@ function submit_delete_user(id){
  * *** 					add_pupil        		    	 ***
  * ---------------------------------------------------------
  * ETML
- * Auteur 		    : Dimitrios Lymberis
- * Date 		    : 02.06.2019
- * Description 		: Ajout d'un utilisateur
+ * Auteur 		    : Jérémie Perret
+ * Date 		    : 06.02.2020
+ * Description 		: Ajout d'un filleul
  *                    le contenu html de la page add.php 
  *                    du module user s'insère dans 
  *                    la modal popup d'ajout
  * -------------------------------------------------------- */
 function add_pupil(){
+
     $('#pupil-modal').html(null);
     $.ajax({
         url:'filleul/add',
@@ -511,6 +512,74 @@ function add_pupil(){
     });
 }
 
+/* ---------------------------------------------------------
+ * *** 			  submit_add_pupil        		    	 ***
+ * ---------------------------------------------------------
+ * ETML
+ * Auteur 		    : Jérémie Perret
+ * Date 		    : 06.02.2020
+ * Description 		: s'enclenche depuis le bouton d'ajout
+ *                    de la modal popup ajout d'un utilisateur
+ * -------------------------------------------------------- */
+function submit_add_pupil(){
+
+    // Fetch form to apply custom Bootstrap validation
+    var form = $("#addUpdatePupil");
+    
+    // if (form[0].checkValidity() === false) {
+    //   event.preventDefault();
+    //   event.stopPropagation();
+    //   form.addClass('was-validated');
+    // }
+    // else{
+    
+    
+            // on récupère les données du formulaire d'ajout
+            var pupilFormData = $('#addUpdatePupil').serializeArray();
+    
+            var pupilData = {};
+    
+            //on transforme les données du formulaire en un tableau associatif (json)
+            pupilFormData.forEach(function(element) {
+                pupilData[element.name]=element.value;
+            });
+    
+            // on récupère la photo au format "binaire"  
+            var pupilPhoto =$('#item-img-output').attr('src');
+            $.ajax({
+                type:"POST",
+                url:"filleul/submit_add",
+                dataType:'json',
+                data : 
+                {
+                    'pupilData' : JSON.stringify(pupilData),
+                    'pupilPhoto' : pupilPhoto
+                },
+            }).done(function(data){
+                // on vérifie qu'il n'y a pas d'erreurs
+                if ((!data.msgErr == ''))
+                    {
+                        Swal.fire(data.msgTitle, data.msgErr, 'error');
+                        
+                        return;
+                    }
+                    else{
+                        $('#user-modal').modal("hide");
+                        filter_user(false);
+                        Swal.fire('Ajout!', "<p> Le filleul <em><strong class='text-warning'>"+ pupilData['name']  + " " + pupilData['firstName'] + "</strong></em> a bien été ajouté !</p>", 'success');
+      
+                        update_count(data.nbreParrainage,data.nbreMembre);
+                        
+                    }
+                    
+                
+            }).fail(function (jqXHR, textStatus) {
+                Swal.fire('ERREUR!', textStatus, 'error');
+            });  
+    
+        // }
+    
+    }
 
 function filter_user(tooltipShow=true){
     
@@ -590,7 +659,7 @@ function update_count(nbreParrainage,nbreMembre){
 
 }
 
-
+//User picture
 var $uploadCrop,
 tempFilename,
 rawImg,
@@ -656,4 +725,72 @@ $('#cropImageBtn').on('click', function (ev) {
 $('.usrPhoto-rotate').on('click', function(ev) {
     console.log(parseInt($(this).data('deg')));
     $uploadCrop.croppie('rotate', parseInt($(this).data('deg')));
+});
+
+//Pupil picture
+var $uploadCropPupil,
+tempFilenamePupil,
+rawImgPupil,
+imageIdPupil;
+
+function readFile(input) {
+    if (input.files && input.files[0]) {
+        var reader = new FileReader();
+        reader.onload = function (e) {
+            $('.upload-pupil-photo').addClass('ready');
+            $('#cropImagePupil').modal('show');
+            $("#pupil-modal").modal('hide');
+            rawImgPupil = e.target.result;
+        }
+        reader.readAsDataURL(input.files[0]);
+    }
+    else {
+        Swal.fire("Sorry - you're browser doesn't support the FileReader API");
+    }
+};
+
+$uploadCropPupil = $('#upload-pupil-photo').croppie({
+    viewport: {
+        width: 150,
+        height: 200,
+    },
+    boundary: {
+        width: 300,
+        height: 300
+    },
+    enforceBoundary: false,
+    enableOrientation: true
+});
+
+$("#pupil-modal").on('change', '.item-img', function () {
+    imageIdPupil = $(this).data('id'); 
+    tempFilenamePupil = $(this).val();
+    $('#cancelCropBtn').data('id', imageIdPupil); readFile(this); 
+});
+
+$('#cropImagePupil').on('shown.bs.modal', function(){
+
+    $uploadCropPupil.croppie('bind', {
+        url: rawImgPupil
+    }).then(function(){
+        console.log('jQuery bind complete');
+    });
+});
+
+$('#cropImagePupil').on('click', function (ev) {
+    $uploadCropPupil.croppie('result', {
+        type: 'base64',
+        format: 'jpeg',
+        size: {width: 150, height: 200}
+    }).then(function (resp) {
+        $('#item-img-output').attr('src', resp);
+        $('#cropImagePupil').modal('hide');
+        $("#pupil-modal").modal('show');
+    });
+});
+
+/* permet la rotation de l'image */
+$('.pupilPhoto-rotate').on('click', function(ev) {
+    console.log(parseInt($(this).data('deg')));
+    $uploadCropPupil.croppie('rotate', parseInt($(this).data('deg')));
 });

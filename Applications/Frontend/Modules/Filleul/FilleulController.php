@@ -178,9 +178,9 @@ class FilleulController extends BackController
         $pupilData = $this->managers->getManagerOf('Filleul')->getPupilData($idPupil);
         die(json_encode($pupilData));
     }
-    // Add display to submit a pupil
-    function executeAddPupil(HTTPRequest $request) {
 
+    // Add display to submit a pupil
+    function executeAdd(HTTPRequest $request) {
         $errors = array();
 
         /* on vérifie qu'on a les bons droits .. c'est à dire qu'on fait partie du comité */
@@ -189,98 +189,142 @@ class FilleulController extends BackController
             $errors[0]="Vous nêtes pas autorisé à accéder à cette page !";
             $this->app->user()->setFlash($errors,'danger','Droits ');
             $this->app->httpResponse()->redirect($request->httpReferer());
-        }  
+        }
+        $users = $this->managers->getManagerOf('User')->getList();
+        $this->page->addVar('userList', $users);
             /* on affiche la page add.php  dans une popup modal */
             $this->page->setLayout();
     }
 
     // Add a pupil to the database
-    public function executeAddSubmitPupil(HTTPRequest $request)
+    public function executeAddSubmit(HTTPRequest $request)
     {
-        if($request->postExists('name'))
-        {
-            $name = $request->postData('name');
-        }
-        else
-        {
-            $name = "";
-        }
-
-        if($request->postExists('firstName'))
-        {
-            $firstName = $request->postData('firstName');
-        }
-        else
-        {
-            $firstName = "";
+        
+        $errors = array();
+        /* on vérifie qu'on a les bons droits .. c'est à dire qu'on fait partie du comité */
+        if (!($this->app->user()->isAuthenticated() and ($this->app->user()->getAttribute('isInCD')))){
+            
+            $errors[0]="Vous nêtes pas autorisé à accéder à cette page !";
+            $this->app->user()->setFlash($errors,'danger','Droits ');
+            $this->app->httpResponse()->redirect($request->httpReferer());
         }
 
-        if($request->postExists('address'))
-        {
-            $address = $request->postData('address');
-        }
-        else
-        {
-            $address = "";
+        // le retour de l'appel Ajax
+        $results=[];
+        $results['msgErr']='';
+        $results['msgTitle']='';
+        
+        
+        if ($request->postExists("pupilData")){
+            $pupilData =  json_decode($request->postData("pupilData"));
+            $photoName = "x";
+            if ($request->postExists('pupilPhoto'))
+            {
+                $pupilPhoto = $request->postData('pupilPhoto');
+                if( substr($pupilPhoto, 0, 4) !=="http"){
+
+                    $dataPhoto = $pupilPhoto;
+
+                    $image_array_1 = explode(";", $dataPhoto);
+
+                    $image_array_2 = explode(",", $image_array_1[1]);
+
+                    $dataPhoto = base64_decode($image_array_2[1]);
+
+                    $photoName = time() . '.png';
+                    if ($photoName!=null){
+
+                        //on place la photo dans le répertoire des utilisateurs
+                        file_put_contents(IMAGES_FOLDER.FOLDER_IMG_FILLEUL.$photoName, $dataPhoto);
+                    }
+                }
+
+            }
+            if(isset($pupilData->name))
+            {
+                $name = $pupilData->name;
+            }
+            else
+            {
+                $name = "";
+            }
+
+            if(isset($pupilData->firstName))
+            {
+                $firstName = $pupilData->firstName;
+            }
+            else
+            {
+                $firstName = "";
+            }
+
+            if(isset($pupilData->address))
+            {
+                $address = $pupilData->address;
+            }
+            else
+            {
+                $address = "";
+            }
+
+            if(isset($pupilData->dadsName, $pupilData->mothersName))
+            {
+                $parentsName = $pupilData->dadsName.';'.$pupilData->mothersName;
+            }
+            else
+            {
+                $parentsName = "";
+            }
+
+            if(isset($pupilData->birthDate))
+            {
+                $birthDate = $pupilData->birthDate;
+            }
+            else
+            {
+                $birthDate = "";
+            }
+
+            if(isset($pupilData->sponsor))
+            {
+                $sponsor = $pupilData->sponsor;
+            }
+            else
+            {
+                $sponsor = "";
+            }
+
+            if(isset($pupilData->building))
+            {
+                $building = $pupilData->building;
+            }
+            else
+            {
+                $building = "";
+            }
+
+            if(isset($pupilData->filiation))
+            {
+                $filiation = $pupilData->filiation;
+            }
+            else
+            {
+                $filiation = "";
+            }
+
+            if(isset($pupilData->training))
+            {
+                $training = $pupilData->training;
+            }
+            else
+            {
+                $training = "";
+            }
+            // Add the pupil to the database
+            $this->managers->getManagerOf('Filleul')->addPupil($name, $firstName, $address, $parentsName, $birthDate, $photoName,$building, $filiation, $training, $sponsor);
         }
 
-        if($request->postExists('parentsName'))
-        {
-            $parentsName = $request->postData('parentsName');
-        }
-        else
-        {
-            $parentsName = "";
-        }
-
-        if($request->postExists('birthDate'))
-        {
-            $birthDate = $request->postData('birthDate');
-        }
-        else
-        {
-            $birthDate = "";
-        }
-
-        if($request->postExists('sponsor'))
-        {
-            $sponsor = $request->postData('sponsor');
-        }
-        else
-        {
-            $sponsor = "";
-        }
-
-        if($request->postExists('building'))
-        {
-            $building = $request->postData('building');
-        }
-        else
-        {
-            $building = "";
-        }
-
-        if($request->postExists('filiation'))
-        {
-            $filiation = $request->postData('filiation');
-        }
-        else
-        {
-            $filiation = "";
-        }
-
-        if($request->postExists('training'))
-        {
-            $training = $request->postData('training');
-        }
-        else
-        {
-            $training = "";
-        }
-
-        // Add the pupil to the database
-        $this->managers->getManagerOf('Filleul')->addPupil($name, $firstName, $address, $parentsName, $birthDate, $building, $filiation, $training, $sponsor);
-        die();
+        die(true);
     }
 
     // Update a pupil in the database

@@ -86,18 +86,18 @@ class FilleulManager_PDO extends FilleulManager
     }
 
     // Add a pupil to the database
-    public function addPupil($name, $firstName, $address, $parentsNames, $birthDate, $building, $filiation, $training, $sponsor)
+    public function addPupil($name, $firstName, $address, $parentsNames, $birthDate, $pictureName,$building, $filiation, $training, $sponsor)
     {
         // Add the pupil
         if($sponsor == "NULL") // If the pupil has no sponsor
         {
             $addPupilQuery = "INSERT INTO t_child (chiName, chiFirstName, chiAddress, chiParentsNames, chiBirthDate, chiPicture, fkBuilding, 
-            fkFiliation, fkTraining, fkUser) VALUES ('$name', '$firstName', '$address', '$parentsNames', '$birthDate', 'x', '$building', '$filiation', '$training', $sponsor)";
+            fkFiliation, fkTraining, fkUser) VALUES ('$name', '$firstName', '$address', '$parentsNames', '$birthDate', '$pictureName', '$building', '$filiation', '$training', $sponsor)";
         }
         else // If the pupil has a sponsor
         {
             $addPupilQuery = "INSERT INTO t_child (chiName, chiFirstName, chiAddress, chiParentsNames, chiBirthDate, chiPicture, fkBuilding, 
-            fkFiliation, fkTraining, fkUser) VALUES ('$name', '$firstName', '$address', '$parentsNames', '$birthDate', 'x', '$building', '$filiation', '$training', '$sponsor')";
+            fkFiliation, fkTraining, fkUser) VALUES ('$name', '$firstName', '$address', '$parentsNames', '$birthDate', '$pictureName', '$building', '$filiation', '$training', '$sponsor')";
         }
 
         $req = $this->dao->query($addPupilQuery);
