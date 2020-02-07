@@ -16,7 +16,7 @@
         <!-- Modal body -->
         <div class="modal-body">
             <div class="form-div">
-                <form method="post" id="addUpdatePupil">
+                <form method="post" id="addPupil">
                     <input type="hidden" name="id" id="pupilAddUpdateModalId" value="">
                     <fieldset>
                         <!-- section: Photo -->

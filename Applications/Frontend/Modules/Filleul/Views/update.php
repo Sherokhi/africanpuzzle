@@ -16,8 +16,7 @@
         <!-- Modal body -->
         <div class="modal-body">
             <div class="form-div">
-                <form method="post" id="addUpdatePupil">
-                    <input type="hidden" name="id" id="pupilAddUpdateModalId" value="">
+                <form method="post" id="updatePupil">
                     <fieldset>
                         <!-- section: Photo -->
                         <div class="row">
@@ -104,8 +103,10 @@
                             <label class="col-lg-2 col-form-label">Bâtiment</label>
                             <div class="col-lg-10">
                                 <select class="form-control" name="building" id="pupilAddUpdateModalBuilding">
-                                    <option value="1">Public</option>
-                                    <option value="2">Privé</option>
+                                    <?php foreach($buildings as $building) {
+                                        ?>
+                                        <option value="<?php echo($building['idBuilding']); ?>" <?php if ($pupil['fkBuilding'] == $building['idBuilding']){ echo("selected"); } ?>><?php echo ($building['buiName']); ?></option>
+                                    <?php } ?>
                                 </select>
                             </div>
                         </div>
@@ -115,8 +116,10 @@
                             <label class="col-lg-2 col-form-label">Filière</label>
                             <div class="col-lg-10">
                                 <select class="form-control" name="filiation" id="pupilAddUpdateModalFiliation">
-                                    <option value="1">Primaire</option>
-                                    <option value="2">Secondaire</option>
+                                    <?php foreach($filiations as $filiation) {
+                                        ?>
+                                        <option value="<?php echo($filiation['idFiliation']); ?>" <?php if ($pupil['fkFiliation'] == $filiation['idFiliation']){ echo("selected"); } ?>><?php echo ($filiation['filName']); ?></option>
+                                    <?php } ?>
                                 </select>
                             </div>
                         </div>
@@ -126,15 +129,17 @@
                             <label class="col-lg-2 col-form-label">Formation</label>
                             <div class="col-lg-10">
                                 <select class="form-control" name="training" id="pupilAddUpdateModalTraining">
-                                    <option value="1">Année 2019 à 60.-</option>
-                                    <option value="3">Année 2019 à 75.-</option>
+                                    <?php foreach($trainings as $training) {
+                                        ?>
+                                        <option value="<?php echo($training['idTraining']); ?>" <?php if ($pupil['fkTraining'] == $training['idTraining']){ echo("selected"); } ?>><?php echo ("Année ".$training['traYear'].' à '.$training['traCost']); ?></option>
+                                    <?php } ?>
                                 </select>
                             </div>
                         </div>
                     </fieldset>
                     <div class="float-right">
                         <input id="pupilButtonSubmit" class="btn btn-info" type="button" value="Enregistrer"
-                            onclick="submit_add_pupil()"></button>
+                            onclick="submit_edit_pupil(<?php echo($pupil['idChild']); ?>)"></button>
                     </div>
                 </form>
             </div>

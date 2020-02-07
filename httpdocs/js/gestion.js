@@ -524,7 +524,7 @@ function add_pupil(){
 function submit_add_pupil(){
 
     // Fetch form to apply custom Bootstrap validation
-    var form = $("#addUpdatePupil");
+    var form = $("#addPupil");
     
     // if (form[0].checkValidity() === false) {
     //   event.preventDefault();
@@ -604,8 +604,70 @@ function edit_pupil(id){
     });
 }
 
+/* *
+ * ---------------------------------------------------------
+ * *** 			  submit_edit_pupil        		    	 ***
+ * ---------------------------------------------------------
+ * ETML
+ * Auteur 		    : Jérémie Perret
+ * Date 		    : 07.02.2020
+ * Description 		: -
+ * -------------------------------------------------------- */
+function submit_edit_pupil(id){
+
+    var form = $("#updatePupil");
+
+    if (form[0].checkValidity() === false) {
+        event.preventDefault();
+        event.stopPropagation();
+        form.addClass('was-validated');
+    }
+    else{
+        // on récupère les données du formulaire d'ajout
+        var pupilFormData = $('#updatePupil').serializeArray();
+
+        var pupilData = {};
+
+        //on transforme les données du formulaire en un tableau associatif (json)
+        pupilFormData.forEach(function(element) {
+            pupilData[element.name]=element.value;
+        });
+
+        // on récupère la photo au format "binaire"
+        var pupilPhoto =$('#item-img-output').attr('src');
+        $.ajax({
+            type:"POST",
+            url:"/filleul/"+id+"/submit_edit",
+            dataType:'json',
+            data :
+                {
+                    'pupilData' : JSON.stringify(pupilData),
+                    'pupilPhoto' : pupilPhoto,
+                    'idPupil' : id
+                },
+        }).done(function(data){
+            console.log(pupilData);
+            console.log(data);
+            // on vérifie qu'il n'y a pas d'erreurs
+            if ((!data.msgErr == ''))
+            {
+                Swal.fire(data.msgTitle, data.msgErr, 'error');
+
+                return;
+            }
+            else{
+                filter_user(false);
+                Swal.fire('Edition!', "<p> Le filleul <em><strong class='text-warning'>"+ pupilData.firstName  + " " + pupilData.name + "</strong></em> a bien été modifié !</p>", 'success');
+                $('#pupil-modal').modal("hide");
+            }
 
 
+        }).fail(function (jqXHR, textStatus) {
+            Swal.fire('ERREUR!', textStatus, 'error');
+        });
+    }
+
+}
 function filter_user(tooltipShow=true){
     
     $('#load-data-user').html(null);
@@ -676,6 +738,7 @@ function filter_user(tooltipShow=true){
         }       
     }
 }
+
 
 function update_count(nbreParrainage,nbreMembre){
     
