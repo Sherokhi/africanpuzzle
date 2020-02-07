@@ -72,7 +72,7 @@ class FilleulManager_PDO extends FilleulManager
     {
         // Get the data of a pupil depending on its id
         $pupilDataQuery ="SELECT t_child.idChild, t_child.chiName, t_child.chiFirstName, t_child.chiAddress, t_child.chiParentsNames, t_child.chiBirthDate, 
-        t_child.chiPicture, t_building.buiState, t_building.buiName, t_filiation.filName, t_training.traCost, t_user.useName, 
+        t_child.chiPicture, t_child.fkUser, t_building.buiState, t_building.buiName, t_filiation.filName, t_training.traCost, t_user.useName, 
         t_user.useFirstName FROM t_child LEFT OUTER JOIN t_building ON t_child.fkBuilding = t_building.idBuilding 
         LEFT OUTER JOIN t_filiation ON t_child.fkFiliation = t_filiation.idFiliation LEFT OUTER JOIN t_training 
         ON t_child.fkTraining = t_training.idTraining LEFT OUTER JOIN t_user ON t_child.fkUser = t_user.idUser WHERE t_child.idChild = '$idPupil'";
