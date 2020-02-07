@@ -581,6 +581,31 @@ function submit_add_pupil(){
     
     }
 
+
+/* *
+ * ---------------------------------------------------------
+ * *** 			      edit_pupil        		    	 ***
+ * ---------------------------------------------------------
+ * ETML
+ * Auteur 		    : Jérémie Perret
+ * Date 		    : 02.07.2020
+ * Description 		: -
+ * -------------------------------------------------------- */
+function edit_pupil(id){
+    $('#pupil-modal').html(null);
+
+    $.ajax({
+        type:'GET',
+        url:'filleul/'+id+'/edit',
+        dataType:'html',
+    }).done(function(html){
+        $('#pupil-modal').append(html);
+        $('#pupil-modal').modal("show");
+    });
+}
+
+
+
 function filter_user(tooltipShow=true){
     
     $('#load-data-user').html(null);
