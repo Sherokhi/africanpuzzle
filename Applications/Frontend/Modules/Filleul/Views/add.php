@@ -104,7 +104,7 @@
                                     <option value="NULL">Aucun</option>
                                     <?php foreach($userList as $user) {
                                         ?>
-                                        <option value="<?php $user->id(); ?>"><?php $user->name(); ?> <?php $user->firstName(); ?></option>
+                                        <option value="<?php echo($user->idUser()); ?>"><?php echo ($user->useName()." ".$user->useFirstName()); ?></option>
 
                                     <?php } ?>
                                 </select>
