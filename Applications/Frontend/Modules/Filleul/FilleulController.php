@@ -327,6 +327,24 @@ class FilleulController extends BackController
         die(true);
     }
 
+    // Add display to submit a pupil
+    function executeUpdate(HTTPRequest $request) {
+        $errors = array();
+
+        /* on vérifie qu'on a les bons droits .. c'est à dire qu'on fait partie du comité */
+        if (!($this->app->user()->isAuthenticated() and ($this->app->user()->getAttribute('isInCD')))){
+
+            $errors[0]="Vous nêtes pas autorisé à accéder à cette page !";
+            $this->app->user()->setFlash($errors,'danger','Droits ');
+            $this->app->httpResponse()->redirect($request->httpReferer());
+        }
+        $users = $this->managers->getManagerOf('User')->getList();
+        $pupilEdit = $this->managers->getManagerOf('Filleul')->getPupilData($request->getData('id'));
+        $this->page->addVar('users', $users);
+        $this->page->addVar('pupil', $pupilEdit);
+        /* on affiche la page add.php  dans une popup modal */
+        $this->page->setLayout();
+    }
     // Update a pupil in the database
     public function executeUpdatePupil(HTTPRequest $request)
     {

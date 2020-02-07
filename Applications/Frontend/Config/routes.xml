@@ -59,7 +59,10 @@
      <route url="/filleul/submit_add" module="Filleul" action="addSubmit"/>
 
      <!-- update filleul -->
-     <route url="/filleul/update" module="Filleul" action="updatePupil"/>
+     <route url="/filleul/([0-9]+)/edit" module="Filleul" action="update" vars="id"/>
+
+     <!-- update filleul submit -->
+     <route url="/filleul/([0-9]+)/edit" module="Filleul" action="updateSubmit" vars="id"/>
 
      <!-- delete filleul -->
      <route url="/filleul/delete" module="Filleul" action="deletePupil"/>
