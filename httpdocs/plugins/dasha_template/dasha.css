@@ -4430,7 +4430,7 @@ small {
   .has-badge .badge {
     position: absolute;
     top: 18%;
-    left: 38px; }
+    left: -10px; }
   .has-badge.dropdown-toggle::after {
     display: none; }
 
