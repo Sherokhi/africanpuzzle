@@ -20,7 +20,7 @@ class FilleulManager_PDO extends FilleulManager
         t_child.chiPicture, t_building.buiState, t_filiation.filName, t_training.traCost, t_user.useName, 
         t_user.useFirstName FROM t_child LEFT OUTER JOIN t_building ON t_child.fkBuilding = t_building.idBuilding 
         LEFT OUTER JOIN t_filiation ON t_child.fkFiliation = t_filiation.idFiliation LEFT OUTER JOIN t_training 
-        ON t_child.fkTraining = t_training.idTraining LEFT OUTER JOIN t_user ON t_child.fkUser = t_user.idUser  ';
+        ON t_child.fkTraining = t_training.idTraining LEFT OUTER JOIN t_user ON t_child.fkUser = t_user.idUser ORDER BY t_child.chiName ASC, t_child.chiFirstName';
 
         $req = $this->dao->query($queryPupils);
 
@@ -41,7 +41,7 @@ class FilleulManager_PDO extends FilleulManager
         LEFT OUTER JOIN t_user ON t_child.fkUser = t_user.idUser WHERE (t_building.buiState = $buiState) AND (t_child.chiBirthDate LIKE '$birthYear%') 
         AND (CONCAT(t_child.chiName, t_child.chiFirstName, t_child.chiAddress, t_user.useName, t_user.useFirstName) LIKE '%$search%') OR 
         (t_building.buiState = $buiState) AND (t_child.chiBirthDate LIKE '$birthYear%') AND (CONCAT(t_user.useName, t_user.useFirstName) 
-        IS NULL) AND (CONCAT(t_child.chiName, t_child.chiFirstName) LIKE '%$search%')";
+        IS NULL) AND (CONCAT(t_child.chiName, t_child.chiFirstName) LIKE '%$search%') ORDER BY t_child.chiName ASC, t_child.chiFirstName";
 
         $req = $this->dao->query($filterQuery);
 
@@ -72,7 +72,7 @@ class FilleulManager_PDO extends FilleulManager
     {
         // Get the data of a pupil depending on its id
         $pupilDataQuery ="SELECT t_child.idChild, t_child.chiName, t_child.chiFirstName, t_child.chiAddress, t_child.chiParentsNames, t_child.chiBirthDate, 
-        t_child.chiPicture, t_building.buiState, t_building.buiName, t_filiation.filName, t_training.traCost, t_user.useName, 
+        t_child.chiPicture, t_child.fkUser, t_child.fkFiliation, t_child.fkTraining, t_child.fkBuilding, t_building.buiState, t_building.buiName, t_filiation.filName, t_training.traCost, t_user.useName, 
         t_user.useFirstName FROM t_child LEFT OUTER JOIN t_building ON t_child.fkBuilding = t_building.idBuilding 
         LEFT OUTER JOIN t_filiation ON t_child.fkFiliation = t_filiation.idFiliation LEFT OUTER JOIN t_training 
         ON t_child.fkTraining = t_training.idTraining LEFT OUTER JOIN t_user ON t_child.fkUser = t_user.idUser WHERE t_child.idChild = '$idPupil'";
@@ -99,24 +99,23 @@ class FilleulManager_PDO extends FilleulManager
             $addPupilQuery = "INSERT INTO t_child (chiName, chiFirstName, chiAddress, chiParentsNames, chiBirthDate, chiPicture, fkBuilding, 
             fkFiliation, fkTraining, fkUser) VALUES ('$name', '$firstName', '$address', '$parentsNames', '$birthDate', '$pictureName', '$building', '$filiation', '$training', '$sponsor')";
         }
-
         $req = $this->dao->query($addPupilQuery);
     }
 
     // Update a pupil in the database
-    public function updatePupil($id, $name, $firstName, $address, $parentsNames, $birthDate, $building, $filiation, $training, $sponsor)
+    public function updatePupil($id, $name, $firstName, $address, $parentsNames, $birthDate, $pictureName, $building, $filiation, $training, $sponsor)
     {
         // Update the pupil
         if($sponsor == "NULL") // If the pupil has no sponsor
         {
             $updatePupilQuery = "UPDATE t_child SET chiName = '$name', chiFirstName = '$firstName', chiAddress = '$address', chiParentsNames = '$parentsNames', 
-            chiBirthDate = '$birthDate', chiPicture = 'x', fkBuilding = '$building', fkFiliation = '$filiation', fkTraining = '$training', fkUser = $sponsor
+            chiBirthDate = '$birthDate', chiPicture = '$pictureName', fkBuilding = '$building', fkFiliation = '$filiation', fkTraining = '$training', fkUser = $sponsor
             WHERE t_child.idChild = '$id'";
         }
         else // If the pupil has a sponsor
         {
             $updatePupilQuery = "UPDATE t_child SET chiName = '$name', chiFirstName = '$firstName', chiAddress = '$address', chiParentsNames = '$parentsNames', 
-            chiBirthDate = '$birthDate', chiPicture = 'x', fkBuilding = '$building', fkFiliation = '$filiation', fkTraining = '$training', fkUser = '$sponsor' 
+            chiBirthDate = '$birthDate', chiPicture = '$pictureName', fkBuilding = '$building', fkFiliation = '$filiation', fkTraining = '$training', fkUser = '$sponsor' 
             WHERE t_child.idChild = '$id'";
         }
 

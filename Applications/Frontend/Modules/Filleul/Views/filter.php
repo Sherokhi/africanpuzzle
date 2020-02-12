@@ -77,7 +77,7 @@ if(!empty($filiations))
                                         <!-- START dropdown-->
                                         <div class="float-right dropdown">
                                             <i class="far fa-comment width-30 height-30 f-s-20 text-center ico-crud" onclick="setPupil(<?= $pupil['idChild'] ?>, 2)"  title="Ajouter un commentaire" style="line-height: 30px"></i>
-                                            <i class="fas fa-edit width-30 height-30 f-s-20 text-center ico-crud" onclick="setPupil(<?= $pupil['idChild'] ?>, 0)" title="Modifier" style="line-height: 30px"></i>
+                                            <i class="fas fa-edit width-30 height-30 f-s-20 text-center ico-crud" onclick="edit_pupil(<?= $pupil['idChild'] ?>, 0)" title="Modifier" style="line-height: 30px"></i>
                                             <i class="far fa-trash-alt width-30 height-30 f-s-20 text-center ico-crud" onclick="setPupil(<?= $pupil['idChild'] ?>, 3)" title="Supprimer"  style="line-height: 30px"></i>
                                         </div> 
                                         <!-- END dropdown-->

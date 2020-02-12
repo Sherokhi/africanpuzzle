@@ -407,9 +407,6 @@ else{
             'idUser' : id
         },
     }).done(function(data){
-
-       
-
         // on vérifie qu'il n'y a pas d'erreurs
         if ((!data.msgErr == ''))
 			{
@@ -524,18 +521,9 @@ function add_pupil(){
 function submit_add_pupil(){
 
     // Fetch form to apply custom Bootstrap validation
-    var form = $("#addUpdatePupil");
-    
-    // if (form[0].checkValidity() === false) {
-    //   event.preventDefault();
-    //   event.stopPropagation();
-    //   form.addClass('was-validated');
-    // }
-    // else{
-    
-    
+    var form = $("#addPupil");
             // on récupère les données du formulaire d'ajout
-            var pupilFormData = $('#addUpdatePupil').serializeArray();
+            var pupilFormData = form.serializeArray();
     
             var pupilData = {};
     
@@ -564,12 +552,10 @@ function submit_add_pupil(){
                         return;
                     }
                     else{
-                        $('#user-modal').modal("hide");
-                        filter_user(false);
+                        $('#pupil-modal').modal("hide");
+                        var today = new Date();
+                        filter_Filleul(today.getFullYear(), 1);
                         Swal.fire('Ajout!', "<p> Le filleul <em><strong class='text-warning'>"+ pupilData['name']  + " " + pupilData['firstName'] + "</strong></em> a bien été ajouté !</p>", 'success');
-      
-                        update_count(data.nbreParrainage,data.nbreMembre);
-                        
                     }
                     
                 
@@ -580,6 +566,94 @@ function submit_add_pupil(){
         // }
     
     }
+
+
+/* *
+ * ---------------------------------------------------------
+ * *** 			      edit_pupil        		    	 ***
+ * ---------------------------------------------------------
+ * ETML
+ * Auteur 		    : Jérémie Perret
+ * Date 		    : 02.07.2020
+ * Description 		: -
+ * -------------------------------------------------------- */
+function edit_pupil(id){
+    $('#pupil-modal').html(null);
+
+    $.ajax({
+        type:'GET',
+        url:'filleul/'+id+'/edit',
+        dataType:'html',
+    }).done(function(html){
+        $('#pupil-modal').append(html);
+        $('#pupil-modal').modal("show");
+    });
+}
+
+/* *
+ * ---------------------------------------------------------
+ * *** 			  submit_edit_pupil        		    	 ***
+ * ---------------------------------------------------------
+ * ETML
+ * Auteur 		    : Jérémie Perret
+ * Date 		    : 07.02.2020
+ * Description 		: -
+ * -------------------------------------------------------- */
+function submit_edit_pupil(id){
+
+    var form = $("#updatePupil");
+
+    if (form[0].checkValidity() === false) {
+        event.preventDefault();
+        event.stopPropagation();
+        form.addClass('was-validated');
+    }
+    else{
+        // on récupère les données du formulaire d'ajout
+        var pupilFormData = $('#updatePupil').serializeArray();
+
+        var pupilData = {};
+
+        //on transforme les données du formulaire en un tableau associatif (json)
+        pupilFormData.forEach(function(element) {
+            pupilData[element.name]=element.value;
+        });
+
+        // on récupère la photo au format "binaire"
+        var pupilPhoto =$('#item-img-output').attr('src');
+        $.ajax({
+            type:"POST",
+            url:"/filleul/"+id+"/submit_edit",
+            dataType:'json',
+            data :
+                {
+                    'pupilData' : JSON.stringify(pupilData),
+                    'pupilPhoto' : pupilPhoto,
+                    'idPupil' : id
+                },
+        }).done(function(data){
+            // on vérifie qu'il n'y a pas d'erreurs
+            if ((!data.msgErr == ''))
+            {
+                Swal.fire(data.msgTitle, data.msgErr, 'error');
+
+                return;
+            }
+            else{
+                var today = new Date();
+                filter_Filleul(today.getFullYear(), 1);
+                Swal.fire('Edition!', "<p> Le filleul <em><strong class='text-warning'>"+ pupilData.firstName  + " " + pupilData.name + "</strong></em> a bien été modifié !</p>", 'success');
+                $('#pupil-modal').modal("hide");
+
+            }
+
+
+        }).fail(function (jqXHR, textStatus) {
+            Swal.fire('ERREUR!', textStatus, 'error');
+        });
+    }
+
+}
 
 function filter_user(tooltipShow=true){
     
@@ -651,6 +725,7 @@ function filter_user(tooltipShow=true){
         }       
     }
 }
+
 
 function update_count(nbreParrainage,nbreMembre){
     
