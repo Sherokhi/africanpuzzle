@@ -20,7 +20,7 @@ class FilleulManager_PDO extends FilleulManager
         t_child.chiPicture, t_building.buiState, t_filiation.filName, t_training.traCost, t_user.useName, 
         t_user.useFirstName FROM t_child LEFT OUTER JOIN t_building ON t_child.fkBuilding = t_building.idBuilding 
         LEFT OUTER JOIN t_filiation ON t_child.fkFiliation = t_filiation.idFiliation LEFT OUTER JOIN t_training 
-        ON t_child.fkTraining = t_training.idTraining LEFT OUTER JOIN t_user ON t_child.fkUser = t_user.idUser ORDER BY t_child.chiName ASC, t_child.chiFirstName';
+        ON t_child.fkTraining = t_training.idTraining LEFT OUTER JOIN t_user ON t_child.fkUser = t_user.idUser WHERE 1=1 ORDER BY t_child.chiName ASC, t_child.chiFirstName';
 
         $req = $this->dao->query($queryPupils);
 
@@ -33,6 +33,11 @@ class FilleulManager_PDO extends FilleulManager
     // Return the filtered list of pupils 
     public function filterList($search, $birthYear, $buiState)
     {
+        $link = mysqli_connect(DB_HOST_MYSQLI, DB_USER, DB_PWD, DB_NAME);
+        $search = mysqli_real_escape_string($link, $search);
+        $birthYear= mysqli_real_escape_string($link, $birthYear);
+        $buiState= mysqli_real_escape_string($link, $buiState);
+
         // Query that returns the filtered pupils list
         $filterQuery = "SELECT t_child.idChild, t_child.chiName, t_child.chiFirstName, t_child.chiAddress, t_child.chiBirthDate, 
         t_child.chiPicture, t_building.buiState, t_filiation.filName, t_training.traCost, t_user.useName, t_user.useFirstName 
@@ -88,6 +93,18 @@ class FilleulManager_PDO extends FilleulManager
     // Add a pupil to the database
     public function addPupil($name, $firstName, $address, $parentsNames, $birthDate, $pictureName,$building, $filiation, $training, $sponsor)
     {
+        $link = mysqli_connect(DB_HOST_MYSQLI, DB_USER, DB_PWD, DB_NAME);
+        $name = mysqli_real_escape_string($link, $name);
+        $firstName= mysqli_real_escape_string($link, $firstName);
+        $address= mysqli_real_escape_string($link, $address);
+        $parentsNames= mysqli_real_escape_string($link, $parentsNames);
+        $birthDate= mysqli_real_escape_string($link, $birthDate);
+        $pictureName= mysqli_real_escape_string($link, $pictureName);
+        $building= mysqli_real_escape_string($link, $building);
+        $filiation= mysqli_real_escape_string($link, $filiation);
+        $training= mysqli_real_escape_string($link, $training);
+        $sponsor= mysqli_real_escape_string($link, $sponsor);
+
         // Add the pupil
         if($sponsor == "NULL") // If the pupil has no sponsor
         {
@@ -105,6 +122,18 @@ class FilleulManager_PDO extends FilleulManager
     // Update a pupil in the database
     public function updatePupil($id, $name, $firstName, $address, $parentsNames, $birthDate, $pictureName, $building, $filiation, $training, $sponsor)
     {
+        $link = mysqli_connect(DB_HOST_MYSQLI, DB_USER, DB_PWD, DB_NAME);
+        $name = mysqli_real_escape_string($link, $name);
+        $firstName= mysqli_real_escape_string($link, $firstName);
+        $address= mysqli_real_escape_string($link, $address);
+        $parentsNames= mysqli_real_escape_string($link, $parentsNames);
+        $birthDate= mysqli_real_escape_string($link, $birthDate);
+        $pictureName= mysqli_real_escape_string($link, $pictureName);
+        $building= mysqli_real_escape_string($link, $building);
+        $filiation= mysqli_real_escape_string($link, $filiation);
+        $training= mysqli_real_escape_string($link, $training);
+        $sponsor= mysqli_real_escape_string($link, $sponsor);
+
         // Update the pupil
         if($sponsor == "NULL") // If the pupil has no sponsor
         {

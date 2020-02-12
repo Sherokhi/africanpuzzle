@@ -80,6 +80,7 @@ define ('DB_PWD',  'RxFMcGnoEJOBsEVj');
 
 /* serveur local */
 define ('DB_HOST', 'mysql:host=localhost');
+define ('DB_HOST_MYSQLI', 'localhost');
 define ('DB_NAME', 'db_africanpuzzle');
 define ('DB_USER', 'root');
 define ('DB_PWD',  'root');
