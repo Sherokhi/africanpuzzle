@@ -20,7 +20,7 @@ class FilleulManager_PDO extends FilleulManager
         t_child.chiPicture, t_building.buiState, t_filiation.filName, t_training.traCost, t_user.useName, 
         t_user.useFirstName FROM t_child LEFT OUTER JOIN t_building ON t_child.fkBuilding = t_building.idBuilding 
         LEFT OUTER JOIN t_filiation ON t_child.fkFiliation = t_filiation.idFiliation LEFT OUTER JOIN t_training 
-        ON t_child.fkTraining = t_training.idTraining LEFT OUTER JOIN t_user ON t_child.fkUser = t_user.idUser  ';
+        ON t_child.fkTraining = t_training.idTraining LEFT OUTER JOIN t_user ON t_child.fkUser = t_user.idUser ORDER BY t_child.chiName ASC, t_child.chiFirstName';
 
         $req = $this->dao->query($queryPupils);
 
@@ -41,7 +41,7 @@ class FilleulManager_PDO extends FilleulManager
         LEFT OUTER JOIN t_user ON t_child.fkUser = t_user.idUser WHERE (t_building.buiState = $buiState) AND (t_child.chiBirthDate LIKE '$birthYear%') 
         AND (CONCAT(t_child.chiName, t_child.chiFirstName, t_child.chiAddress, t_user.useName, t_user.useFirstName) LIKE '%$search%') OR 
         (t_building.buiState = $buiState) AND (t_child.chiBirthDate LIKE '$birthYear%') AND (CONCAT(t_user.useName, t_user.useFirstName) 
-        IS NULL) AND (CONCAT(t_child.chiName, t_child.chiFirstName) LIKE '%$search%')";
+        IS NULL) AND (CONCAT(t_child.chiName, t_child.chiFirstName) LIKE '%$search%') ORDER BY t_child.chiName ASC, t_child.chiFirstName";
 
         $req = $this->dao->query($filterQuery);
 
