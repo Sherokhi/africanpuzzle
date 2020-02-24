@@ -46,15 +46,15 @@
     <!-- ************************** -->
     <route url="/filleul" module="Filleul" action="index" />
 
-     <!-- filleul filtered -->
-     <route url="/filleul/filter" module="Filleul" action="filter" />
+    <!-- filleul filtered -->
+    <route url="/filleul/filter" module="Filleul" action="filter" />
 
      <!-- get filleul data -->
      <route url="/filleul/([0-9]+)" module="Filleul" action="getPupilData" vars="idPupil"/>
 
      <!-- add filleul -->
      <route url="/filleul/add" module="Filleul" action="add"/>
-     
+
      <!-- add filleul submit -->
      <route url="/filleul/submit_add" module="Filleul" action="addSubmit"/>
 
@@ -64,8 +64,10 @@
      <!-- update filleul submit -->
      <route url="/filleul/([0-9]+)/submit_edit" module="Filleul" action="updateSubmit" vars="id"/>
 
-     <!-- delete filleul -->
-     <route url="/filleul/delete" module="Filleul" action="deletePupil"/>
+    <!-- delete filleul -->
+    <route url="/filleul/([0-9]+)/delete" module="Filleul" action="delete" vars="id"/>
 
+    <!-- delete filleul submit -->
+    <route url="/filleul/([0-9]+)/submit_delete" module="Filleul" action="deleteSubmit" vars="id"/>
 
 </routes>

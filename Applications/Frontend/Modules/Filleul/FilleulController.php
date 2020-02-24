@@ -382,7 +382,7 @@ class FilleulController extends BackController
             if ($request->postExists('pupilPhoto'))
             {
                 $pupilPhoto = $request->postData('pupilPhoto');
-                if( substr($pupilPhoto, 0, 4) !=="http"){
+                if( substr($pupilPhoto, 0, 4) !== "http"){
 
                     $dataPhoto = $pupilPhoto;
 
@@ -393,11 +393,15 @@ class FilleulController extends BackController
                     $dataPhoto = base64_decode($image_array_2[1]);
 
                     $photoName = time() . '.png';
-                    if ($photoName!=null){
 
+                    if ($photoName!=null){
                         //on place la photo dans le répertoire des utilisateurs
                         file_put_contents(IMAGES_FOLDER.FOLDER_IMG_FILLEUL.$photoName, $dataPhoto);
                     }
+                }
+                else {
+                    $photoLinkParts = explode('/', $pupilPhoto);
+                    $photoName = end($photoLinkParts);
                 }
 
             }
@@ -495,18 +499,37 @@ class FilleulController extends BackController
         die(true);
     }
 
+    function executeDelete(HTTPRequest $request) {
+        $errors = array();
+
+        /* on vérifie qu'on a les bons droits .. c'est à dire qu'on fait partie du comité */
+        if (!($this->app->user()->isAuthenticated() and ($this->app->user()->getAttribute('isInCD')))){
+
+            $errors[0]="Vous nêtes pas autorisé à accéder à cette page !";
+            $this->app->user()->setFlash($errors,'danger','Droits ');
+            $this->app->httpResponse()->redirect($request->httpReferer());
+        }
+
+        $pupilId=$request->getData('id');
+
+        $manager = $this->managers->getManagerOf('Filleul');
+        $pupil = $manager->getPupildata($pupilId);
+        $this->page->addVar('pupil', $pupil);
+
+        $this->page->setLayout();
+    }
     // Delete a pupil in the database
-    public function executeDeletePupil(HTTPRequest $request)
+    public function executeDeleteSubmit(HTTPRequest $request)
     {
-        if($request->postExists('id'))
-        {
-            $id = $request->postData('id');
-            $this->managers->getManagerOf('Filleul')->deletePupil($id);
-            die();
-        }
-        else
-        {
-            die();
-        }
+        $id = $request->getData('id');
+        $manager = $this->managers->getManagerOf('Filleul');
+        $pupil = $manager->getPupildata($id);
+
+        $this->page->addVar('pupil', $pupil);
+        $this->managers->getManagerOf('Filleul')->deletePupil($id);
+
+        $results=[];
+        $results['pupil']=$pupil['chiName']." ".$pupil['chiFirstName'];
+        die(json_encode($results));
     }
 }

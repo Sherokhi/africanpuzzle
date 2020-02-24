@@ -25,7 +25,7 @@
                                 <figure>
                                     <img name="pupilPhoto-rotate" src="<?php if($pupil['chiPicture'] !== 'x') { echo $this->html()->url(IMAGES_FOLDER.FOLDER_IMG_FILLEUL.$pupil['chiPicture']); } else { echo $this->html()->url(IMAGES_FOLDER.'no_photo.png'); } ?>" class="gambar img-responsive img-thumbnail" id="item-img-output" />
                                 </figure>
-                                <input type="file" class="item-img file center-block " name="uploadPupilPhoto" id="uploadPupilPhoto"/>
+                                <input type="file" class="item-img file center-block" name="uploadPupilPhoto" id="uploadPupilPhoto" value="<?php if($pupil['chiPicture'] !== 'x') { echo $this->html()->url(IMAGES_FOLDER.FOLDER_IMG_FILLEUL.$pupil['chiPicture']); } else { echo "x"; } ?>"/>
                                 </label>
                             </div>        
                         </div>
