@@ -511,6 +511,7 @@ class FilleulController extends BackController
         }
 
         $pupilId=$request->getData('id');
+
         $manager = $this->managers->getManagerOf('Filleul');
         $pupil = $manager->getPupildata($pupilId);
         $this->page->addVar('pupil', $pupil);
@@ -520,15 +521,15 @@ class FilleulController extends BackController
     // Delete a pupil in the database
     public function executeDeleteSubmit(HTTPRequest $request)
     {
-        if($request->postExists('id'))
-        {
-            $id = $request->postData('id');
-            $this->managers->getManagerOf('Filleul')->deletePupil($id);
-            die();
-        }
-        else
-        {
-            die();
-        }
+        $id = $request->getData('id');
+        $manager = $this->managers->getManagerOf('Filleul');
+        $pupil = $manager->getPupildata($id);
+
+        $this->page->addVar('pupil', $pupil);
+        $this->managers->getManagerOf('Filleul')->deletePupil($id);
+
+        $results=[];
+        $results['pupil']=$pupil['chiName']." ".$pupil['chiFirstName'];
+        die(json_encode($results));
     }
 }

@@ -655,6 +655,57 @@ function submit_edit_pupil(id){
 
 }
 
+/* ---------------------------------------------------------
+ * *** 			  delete_pupil        		    	     ***
+ * ---------------------------------------------------------
+ * ETML
+ * @author 		    : Jérémie Perret
+ * Date 		    : 12.02.2020
+ * @description		: supprime un filleul
+ * @param           : id --> identifiant du filleul
+ * -------------------------------------------------------- */
+function delete_pupil(id){
+    $('#pupil-modal').html(null);
+
+    $.ajax({
+        type:'GET',
+        url:'filleul/'+id+'/delete',
+        dataType:'html',
+    }).done(function(html){
+        $('#pupil-modal').append(html);
+        $('#pupil-modal').modal("show");
+    });
+}
+
+/* ---------------------------------------------------------
+ * *** 			  submit_delete_pupil        		     ***
+ * ---------------------------------------------------------
+ * ETML
+ * Auteur 		    : Jérémie Perret
+ * Date 		    : 12.02.2020
+ * Description 		: supprime un filleul
+ * Paramètre        : id --> identifiant du filleul
+ * -------------------------------------------------------- */
+function submit_delete_pupil(id){
+    $.ajax({
+        type:"GET",
+        dataType:"html",
+        url:"filleul/"+id+"/submit_delete",
+    }).done(function(data){
+
+        result = JSON.parse(data);
+        Swal.fire('Suppression!', "Le filleul <em><strong class='text-warning'>"+ result.pupil + "</strong></em> a bien été supprimé !", 'success');
+
+        $('#pupil-modal').modal("hide");
+
+        // pour éviter que le tooltip du filtre sur les utilisateurs s'enclenche (aléatoire)
+        // $('#userFilter').tooltip('dispose').tooltip('hide');
+
+        var today = new Date();
+        filter_Filleul(today.getFullYear(), 1);
+    });
+}
+
 function filter_user(tooltipShow=true){
     
     $('#load-data-user').html(null);
