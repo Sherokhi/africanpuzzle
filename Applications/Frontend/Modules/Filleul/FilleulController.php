@@ -13,21 +13,53 @@ use Library\Sly\Network\HTTPRequest;
 
 class FilleulController extends BackController
 {
-    function getTotalFilleulVars() {
-// Execute the queries
-        $pupils = $this->managers->getManagerOf('Filleul')->getList();
-        // Sort filiations in an array
+    function getPupils() {
+        return $this->managers->getManagerOf('Filleul')->getList();
+    }
+
+    function getPupilsWithAge() {
+        $pupils = $this->getPupils();
+        // Get pupils ages instead of birthdate
+        foreach($pupils as $key => $value)
+        {
+            $dateArray = explode("-", $value['chiBirthDate']); // aaaa - mm - dd
+            $chiYear = $dateArray[0];
+            $actualYear = date("Y");
+            $chiAge = $actualYear - $chiYear;
+
+            $pupils[$key]['chiBirthDate'] = $chiAge;
+
+        }
+        return $pupils;
+    }
+    function getFiliationsPupils() {
+        $pupils = $this->getPupils();
         foreach($pupils as $pupil)
         {
             $filiationsArray[] = $pupil['filName'];
+        }
+
+        // Make sure array is unique
+        $filiations = array_unique($filiationsArray);
+        return $filiations;
+    }
+
+    function getBuildingsPupils() {
+        $pupils = $this->getPupils();
+
+        foreach($pupils as $pupil)
+        {
             $buildingArray[] = $pupil['buiState'];
         }
 
-        // Make sure array are uniques
-        $filiations = array_unique($filiationsArray);
+        // Make sure array is unique
         $buildings = array_unique($buildingArray);
+        return $buildings;
+    }
 
-        // Set each values foreach filiations
+    function getFiliationsTotalTrainingCost() {
+        $filiations = $this->getFiliationsPupils();
+        $pupils = $this->getPupils();
         foreach($filiations as $filiation)
         {
             $totalTrainingCost = 0;
@@ -44,8 +76,25 @@ class FilleulController extends BackController
 
         // Filiation = Key, Cost = value
         $filiations = array_combine($filiations, $trainingsCost);
+        return $filiations;
+    }
 
+    function getTotByFiliations() {
+        $totByFiliation=array();
 
+        // total par filiation
+        $nbrByFiliation = $this->managers->getManagerOf('Filleul')->getTotByFiliation();
+        foreach($nbrByFiliation as $key => $value)
+        {
+            $totByFiliation[$key] =  $value;
+
+        }
+        return $totByFiliation;
+    }
+
+    function getTotByBuildings() {
+        $pupils = $this->getPupils();
+        $buildings = $this->getBuildingsPupils();
         // Set each values foreach buidings
         foreach($buildings as $building)
         {
@@ -61,28 +110,16 @@ class FilleulController extends BackController
         }
 
         $buildings = array_combine($buildings, $totInBuilding);
+        return $buildings;
+    }
 
-        // Get pupils ages instead of birthdate
-        foreach($pupils as $key => $value)
-        {
-            $dateArray = explode("-", $value['chiBirthDate']); // aaaa - mm - dd
-            $chiYear = $dateArray[0];
-            $actualYear = date("Y");
-            $chiAge = $actualYear - $chiYear;
 
-            $pupils[$key]['chiBirthDate'] = $chiAge;
 
-        }
-
-        $totByFiliation=array();
-
-        // total par filiation
-        $nbrByFiliation = $this->managers->getManagerOf('Filleul')->getTotByFiliation();
-        foreach($nbrByFiliation as $key => $value)
-        {
-            $totByFiliation[$key] =  $value;
-
-        }
+    function applyInterfaceVars() {
+        $totByFiliation = $this->getTotByFiliations();
+        $pupils = $this->getPupilsWithAge();
+        $buildings = $this->getTotByBuildings();
+        $filiations = $this->getFiliationsTotalTrainingCost();
 
         // total par filiation
         $this->page->addVar('totByFiliation', $totByFiliation);
@@ -100,7 +137,7 @@ class FilleulController extends BackController
     // Get and sort data for the main pupil page
     function executeIndex()
     {
-        $this->getTotalFilleulVars();
+        $this->applyInterfaceVars();
 
         $this->page->setLayout('gestion');
     }
@@ -343,39 +380,14 @@ class FilleulController extends BackController
                 $training = "";
             }
 
-            // Sort filiations in an array
-            foreach($pupils as $pupil)
-            {
-                $filiationsArray[] = $pupil['filName'];
-                $buildingArray[] = $pupil['buiState'];
-            }
 
-            // Make sure array are uniques
-            $filiations = array_unique($filiationsArray);
-            $buildings = array_unique($buildingArray);
-            // Set each values foreach buidings
-            foreach($buildings as $building)
-            {
-                $totalTotInBuilding = 0;
-                foreach($pupils as $pupil)
-                {
-                    // If the pupil is in the filiation
-                    if($building == $pupil['buiState']){
-                        $totalTotInBuilding++; // Add its training cost
-                    }
-                }
-                $totInBuilding[] = $totalTotInBuilding;
-            }
-
-            $buildings = array_combine($buildings, $totInBuilding);
-
-            //Total in buildings
-            $this->page->addVar('buildings', $buildings);
             // Add the pupil to the database
             $this->managers->getManagerOf('Filleul')->addPupil($name, $firstName, $address, $parentsName, $birthDate, $photoName,$building, $filiation, $training, $sponsor);
+            $results['totByFiliation']=$this->getTotByFiliations();
+            $results['totByBuilding']=$this->getTotByBuildings();
         }
 
-        die(true);
+        die(json_encode($results));
     }
 
     // Add display to submit a pupil
@@ -539,8 +551,10 @@ class FilleulController extends BackController
             }
             // Add the pupil to the database
             $this->managers->getManagerOf('Filleul')->updatePupil($id, $name, $firstName, $address, $parentsName, $birthDate, $photoName,$building, $filiation, $training, $sponsor);
+            $results['totByFiliation']=$this->getTotByFiliations();
+            $results['totByBuilding']=$this->getTotByBuildings();
         }
-        die(true);
+        die(json_encode($results));
     }
 
     function executeDelete(HTTPRequest $request) {
@@ -569,11 +583,14 @@ class FilleulController extends BackController
         $manager = $this->managers->getManagerOf('Filleul');
         $pupil = $manager->getPupildata($id);
 
+        $results=[];
+
         $this->page->addVar('pupil', $pupil);
         $this->managers->getManagerOf('Filleul')->deletePupil($id);
 
-        $results=[];
         $results['pupil']=$pupil['chiName']." ".$pupil['chiFirstName'];
+        $results['totByFiliation']=$this->getTotByFiliations();
+        $results['totByBuilding']=$this->getTotByBuildings();
         die(json_encode($results));
     }
 }

@@ -556,7 +556,7 @@ function submit_add_pupil(){
                         var today = new Date();
                         filter_Filleul(today.getFullYear(), 1);
                         Swal.fire('Ajout!', "<p> Le filleul <em><strong class='text-warning'>"+ pupilData['name']  + " " + pupilData['firstName'] + "</strong></em> a bien été ajouté !</p>", 'success');
-                        update_count_pupil()
+                        update_count_pupil(data.totByFiliation[0]['tot_by_filiation'], data.totByFiliation[1]['tot_by_filiation'], data.totByBuilding[0], data.totByBuilding[1])
                 }
                     
                 
@@ -645,7 +645,7 @@ function submit_edit_pupil(id){
                 filter_Filleul(today.getFullYear(), 1);
                 Swal.fire('Edition!', "<p> Le filleul <em><strong class='text-warning'>"+ pupilData.firstName  + " " + pupilData.name + "</strong></em> a bien été modifié !</p>", 'success');
                 $('#pupil-modal').modal("hide");
-
+                update_count_pupil(data.totByFiliation[0]['tot_by_filiation'], data.totByFiliation[1]['tot_by_filiation'], data.totByBuilding[0], data.totByBuilding[1])
             }
 
 
@@ -699,11 +699,9 @@ function submit_delete_pupil(id){
 
         $('#pupil-modal').modal("hide");
 
-        // pour éviter que le tooltip du filtre sur les utilisateurs s'enclenche (aléatoire)
-        // $('#userFilter').tooltip('dispose').tooltip('hide');
-
         var today = new Date();
         filter_Filleul(today.getFullYear(), 1);
+        update_count_pupil(result.totByFiliation[0]['tot_by_filiation'], result.totByFiliation[1]['tot_by_filiation'], result.totByBuilding[0], result.totByBuilding[1])
     });
 }
 
@@ -787,12 +785,10 @@ function update_count(nbreParrainage,nbreMembre){
 }
 
 function update_count_pupil(nbrPrimaire,nbrSecondaire,nbrPublic,nbrPrive){
-
     document.getElementById("nbrPrimaire").innerHTML=nbrPrimaire;
     document.getElementById("nbrSecondaire").innerHTML=nbrSecondaire;
     document.getElementById("nbrPublic").innerHTML=nbrPublic;
     document.getElementById("nbrPrive").innerHTML=nbrPrive;
-
 }
 
 //User picture

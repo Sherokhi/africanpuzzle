@@ -69,7 +69,6 @@
         <div class="cardbox mb-0">
 
             <div class="cardbox-heading">
-                
                 <div class="row text-center">
 					<div class="col-md-1">
 						<div class="counter">
