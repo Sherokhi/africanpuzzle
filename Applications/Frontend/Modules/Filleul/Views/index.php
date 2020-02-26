@@ -74,7 +74,7 @@
 					<div class="col-md-1">
 						<div class="counter">
 						  <i class="fas fa-graduation-cap fa-2x text-warning"></i>
-						  <h3 class="timer count-title count-number" data-to="100" data-speed="1500"><?= $totByFiliation[FIL_PRIMAIRE]["tot_by_filiation"] ?></h3>
+                            <h3 class="timer count-title count-number" data-to="100" data-speed="1500"><span id="nbrPrimaire"><?= $totByFiliation[FIL_PRIMAIRE]["tot_by_filiation"] ?></span></h3>
 						  <p class="count-text ">Primaire</p>
 						</div>
                     </div>
@@ -82,7 +82,7 @@
                     <div class="col-md-1">
 					   <div class="counter">
 						  <i class="fas fa-user-graduate fa-2x text-warning"></i>
-						  <h3 class="timer count-title count-number" data-to="1700" data-speed="1500"><?= $totByFiliation[FIL_SECONDAIRE]["tot_by_filiation"] ?></h3>
+                           <h3 class="timer count-title count-number" data-to="1700" data-speed="1500"><span id="nbrSecondaire"><?= $totByFiliation[FIL_SECONDAIRE]["tot_by_filiation"] ?></span></h3>
 						  <p class="count-text ">Secondaire</p>
 						</div>
                     </div>
@@ -90,7 +90,7 @@
                     <div class="col-md-1">
 						<div class="counter">
 						  <i class="fas fa-school fa-2x text-warning"></i>
-						  <h3 class="timer count-title count-number" data-to="100" data-speed="1500">25</h3>
+                            <h3 class="timer count-title count-number" data-to="100" data-speed="1500"><span id="nbrPublic"><?= $buildings[FIL_PUBLIC] ?></span></h3>
 						  <p class="count-text ">Public</p>
 						</div>
                     </div>
@@ -98,7 +98,7 @@
                     <div class="col-md-1">
 					   <div class="counter">
 						  <i class="fas fa-university fa-2x text-warning"></i>
-						  <h3 class="timer count-title count-number" data-to="1700" data-speed="1500">52</h3>
+                           <h3 class="timer count-title count-number" data-to="1700" data-speed="1500"><span id="nbrPrive"><?= $buildings[FIL_PRIVE] ?></span></h3>
 						  <p class="count-text ">Privé</p>
 						</div>
 					</div>

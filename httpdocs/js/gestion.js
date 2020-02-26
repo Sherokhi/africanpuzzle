@@ -556,7 +556,8 @@ function submit_add_pupil(){
                         var today = new Date();
                         filter_Filleul(today.getFullYear(), 1);
                         Swal.fire('Ajout!', "<p> Le filleul <em><strong class='text-warning'>"+ pupilData['name']  + " " + pupilData['firstName'] + "</strong></em> a bien été ajouté !</p>", 'success');
-                    }
+                        update_count_pupil()
+                }
                     
                 
             }).fail(function (jqXHR, textStatus) {
@@ -785,6 +786,15 @@ function update_count(nbreParrainage,nbreMembre){
 
 }
 
+function update_count_pupil(nbrPrimaire,nbrSecondaire,nbrPublic,nbrPrive){
+
+    document.getElementById("nbrPrimaire").innerHTML=nbrPrimaire;
+    document.getElementById("nbrSecondaire").innerHTML=nbrSecondaire;
+    document.getElementById("nbrPublic").innerHTML=nbrPublic;
+    document.getElementById("nbrPrive").innerHTML=nbrPrive;
+
+}
+
 //User picture
 var $uploadCrop,
 tempFilename,
@@ -823,7 +833,7 @@ $uploadCrop = $('#upload-user-photo').croppie({
 $("#user-modal").on('change', '.item-img', function () {
     imageId = $(this).data('id'); 
     tempFilename = $(this).val();
-    $('#cancelCropBtn').data('id', imageId); readFile(this); 
+    $('#cancelCropBtn').data('id', imageId); readFile(this);
 });
 
 $('#cropImageUser').on('shown.bs.modal', function(){
@@ -891,7 +901,7 @@ $uploadCropPupil = $('#upload-pupil-photo').croppie({
 $("#pupil-modal").on('change', '.item-img', function () {
     imageIdPupil = $(this).data('id'); 
     tempFilenamePupil = $(this).val();
-    $('#cancelCropBtn').data('id', imageIdPupil); readFile(this); 
+    $('#cancelCropBtn').data('id', imageIdPupil); readFile(this);
 });
 
 $('#cropImagePupil').on('shown.bs.modal', function(){

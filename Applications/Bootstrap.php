@@ -130,7 +130,9 @@ define ('GRP_MEMBRE',   '5');
    la table t_filiation de la base de données */
 define ('FIL_PRIMAIRE',   '0'); 
 define ('FIL_SECONDAIRE',   '1');
- 	
+define ('FIL_PUBLIC',   '0');
+define ('FIL_PRIVE',   '1');
+
 
 /* Définition des  rôles d'étudiants (tables roles */
 define ('ROL_DELEGUE',   '64');		        /* délégué */

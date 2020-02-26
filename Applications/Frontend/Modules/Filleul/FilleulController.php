@@ -13,26 +13,31 @@ use Library\Sly\Network\HTTPRequest;
 
 class FilleulController extends BackController
 {
+    function getTotalFilleulVars() {
+
+    }
+
     // Get and sort data for the main pupil page
     function executeIndex()
     {
         // Execute the queries
         $pupils = $this->managers->getManagerOf('Filleul')->getList();
-        
         // Sort filiations in an array
         foreach($pupils as $pupil)
         {
             $filiationsArray[] = $pupil['filName'];
+            $buildingArray[] = $pupil['buiState'];
         }
         
-        // Make sure filiations are unique
+        // Make sure array are uniques
         $filiations = array_unique($filiationsArray);
+        $buildings = array_unique($buildingArray);
 
         // Set each values foreach filiations
         foreach($filiations as $filiation)
         {
             $totalTrainingCost = 0;
-            foreach($pupils as $pupil) 
+            foreach($pupils as $pupil)
             {
                 // If the pupil is in the filiation
                 if($filiation == $pupil['filName']){
@@ -42,8 +47,26 @@ class FilleulController extends BackController
             $trainingsCost[] = $totalTrainingCost;
         }
 
+
         // Filiation = Key, Cost = value
         $filiations = array_combine($filiations, $trainingsCost);
+
+
+        // Set each values foreach buidings
+        foreach($buildings as $building)
+        {
+            $totalTotInBuilding = 0;
+            foreach($pupils as $pupil)
+            {
+                // If the pupil is in the filiation
+                if($building == $pupil['buiState']){
+                    $totalTotInBuilding++; // Add its training cost
+                }
+            }
+            $totInBuilding[] = $totalTotInBuilding;
+        }
+
+        $buildings = array_combine($buildings, $totInBuilding);
 
         // Get pupils ages instead of birthdate
         foreach($pupils as $key => $value)
@@ -54,6 +77,7 @@ class FilleulController extends BackController
             $chiAge = $actualYear - $chiYear;
 
             $pupils[$key]['chiBirthDate'] = $chiAge;
+
         }
         
         $totByFiliation=array();
@@ -74,6 +98,9 @@ class FilleulController extends BackController
 
         // Filiations names
         $this->page->addVar('filiations', $filiations);
+
+        //Total in buildings
+        $this->page->addVar('buildings', $buildings);
 
         $this->page->setLayout('gestion');
     }
@@ -107,54 +134,6 @@ class FilleulController extends BackController
         else
         {
             $buiState = "";
-        }
-
-        // Execute the query
-        $pupils = $this->managers->getManagerOf('Filleul')->filterList($search, $birthYear, $buiState);
-
-        // Sort pupils
-        if(!empty($pupils))
-        {
-            foreach($pupils as $pupil)
-            {
-                $filiationsArray[] = $pupil['filName'];
-            }
-            
-            // Make sure filiations are unique
-            $filiations = array_unique($filiationsArray);
-
-            // Sort filiations costs
-            foreach($filiations as $filiation)
-            {
-                $totalTrainingCost = 0;
-                foreach($pupils as $pupil) 
-                {
-                    if($filiation == $pupil['filName']){
-                        $totalTrainingCost += $pupil['traCost'];
-                    }
-                }
-                $trainingsCost[] = $totalTrainingCost;
-            }
-
-            // Filiation = Key, Cost = value
-            $filiations = array_combine($filiations, $trainingsCost);
-
-            // Sort pupils age instead of birth date
-            foreach($pupils as $key => $value)
-            {
-                $dateArray = explode("-", $value['chiBirthDate']); // aaaa - mm - dd
-                $chiYear = $dateArray[0];
-                $actualYear = date("Y");
-                $chiAge = $actualYear - $chiYear;
-
-                $pupils[$key]['chiBirthDate'] = $chiAge;
-            }
-
-            // Pupils list
-            $this->page->addVar('pupils', $pupils);
-
-            // Filiations names
-            $this->page->addVar('filiations', $filiations);
         }
 
         // Do not use the template, only send $content
@@ -327,6 +306,35 @@ class FilleulController extends BackController
             {
                 $training = "";
             }
+
+            // Sort filiations in an array
+            foreach($pupils as $pupil)
+            {
+                $filiationsArray[] = $pupil['filName'];
+                $buildingArray[] = $pupil['buiState'];
+            }
+
+            // Make sure array are uniques
+            $filiations = array_unique($filiationsArray);
+            $buildings = array_unique($buildingArray);
+            // Set each values foreach buidings
+            foreach($buildings as $building)
+            {
+                $totalTotInBuilding = 0;
+                foreach($pupils as $pupil)
+                {
+                    // If the pupil is in the filiation
+                    if($building == $pupil['buiState']){
+                        $totalTotInBuilding++; // Add its training cost
+                    }
+                }
+                $totInBuilding[] = $totalTotInBuilding;
+            }
+
+            $buildings = array_combine($buildings, $totInBuilding);
+
+            //Total in buildings
+            $this->page->addVar('buildings', $buildings);
             // Add the pupil to the database
             $this->managers->getManagerOf('Filleul')->addPupil($name, $firstName, $address, $parentsName, $birthDate, $photoName,$building, $filiation, $training, $sponsor);
         }
