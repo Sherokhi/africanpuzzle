@@ -801,7 +801,7 @@ tempFilename,
 rawImg,
 imageId;
 
-function readFile(input) {
+function readFile_user(input) {
     if (input.files && input.files[0]) {
         var reader = new FileReader();
         reader.onload = function (e) {
@@ -833,7 +833,7 @@ $uploadCrop = $('#upload-user-photo').croppie({
 $("#user-modal").on('change', '.item-img', function () {
     imageId = $(this).data('id'); 
     tempFilename = $(this).val();
-    $('#cancelCropBtn').data('id', imageId); readFile(this);
+    $('#cancelCropBtn').data('id', imageId); readFile_user(this);
 });
 
 $('#cropImageUser').on('shown.bs.modal', function(){
@@ -869,7 +869,7 @@ tempFilenamePupil,
 rawImgPupil,
 imageIdPupil;
 
-function readFile(input) {
+function readFile_pupil(input) {
     if (input.files && input.files[0]) {
         var reader = new FileReader();
         reader.onload = function (e) {
@@ -901,7 +901,7 @@ $uploadCropPupil = $('#upload-pupil-photo').croppie({
 $("#pupil-modal").on('change', '.item-img', function () {
     imageIdPupil = $(this).data('id'); 
     tempFilenamePupil = $(this).val();
-    $('#cancelCropBtn').data('id', imageIdPupil); readFile(this);
+    $('#cancelCropBtn').data('id', imageIdPupil); readFile_pupil(this);
 });
 
 $('#cropImagePupil').on('shown.bs.modal', function(){
