@@ -123,7 +123,7 @@
                         <div class="col-md-2 offset-md-1">
                             <div class="form-group">
                                 <div class="input-group">
-                                    <input id="searchPupil" class="form-control" type="text" placeholder="Recherche ..." name="search" onchange="filter_Filleul(<?= date('Y') ?>, 1)">
+                                    <input id="searchPupil" class="form-control" type="text" placeholder="Recherche ..." name="search" oninput="filter_Filleul(<?= date('Y') ?>, 1)">
                                     <span class="input-group-text" >
                                         <i class="ion-search" data-pack="default"></i>
                                     </span>
@@ -134,7 +134,7 @@
                         <div class="col-md-2">
                             <div class="form-group">                                                               
                                 <div class="input-group">
-                                    <input id="agePupil" class="form-control" type="text" placeholder="Age ..." name="age" onchange="filter_Filleul(<?= date('Y') ?>, 1)">
+                                    <input id="agePupil" class="form-control" type="text" placeholder="Age ..." name="age" oninput="filter_Filleul(<?= date('Y') ?>, 1)">
                                     <span class="input-group-text" >
                                         <i class="ion-search" data-pack="default"></i>
                                     </span>
