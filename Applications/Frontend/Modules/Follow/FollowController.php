@@ -2,7 +2,7 @@
 
 namespace Applications\Frontend\Modules\Follow;
 
-use Applications\Entities\Follow;
+use Applications\Entities\Comment;
 use Library\Sly\Controller\BackController;
 use Library\Sly\Network\HTTPRequest;
 
@@ -50,7 +50,7 @@ class FollowController extends BackController
             $right = $this->app->user()->getAttribute('right');
             // On Vérifie que ce soit quelqu'un qui ait les droits d'ajout
             if (@$right[FOLLOW] & ADD) {
-                $manager = $this->managers->getManagerOf('Follow');
+                $manager = $this->managers->getManagerOf('Comment');
                 // Récupère la liste de suivis concernant l'élève
                 $follows = $manager->getListByColleague($this->app->user()->getAttribute('user')->id());
 
@@ -82,7 +82,7 @@ class FollowController extends BackController
             $right = $this->app->user()->getAttribute('right');
             // On Vérifie que ce soit quelqu'un qui ait les droits d'ajout
             if (@$right[FOLLOW] & ADD) {
-                $manager = $this->managers->getManagerOf('Follow');
+                $manager = $this->managers->getManagerOf('Comment');
                 // Récupère la liste de suivis concernant l'élève
                 $follows = $manager->getListByColleague($this->app->user()->getAttribute('user')->id());
 
@@ -120,7 +120,7 @@ class FollowController extends BackController
             if ($master_class ) {
 
 
-                $manager = $this->managers->getManagerOf('Follow');
+                $manager = $this->managers->getManagerOf('Comment');
                 // Récupère la liste de suivis concernant l'élève
                 $follows = $manager->getListByMaster($this->app->user()->getAttribute('user')->id());
 
@@ -132,7 +132,7 @@ class FollowController extends BackController
             }
             else if (($this->app->user()->getAttribute('group') == 10)) {
 
-                $manager = $this->managers->getManagerOf('Follow');
+                $manager = $this->managers->getManagerOf('Comment');
                 // Récupère la liste de suivis concernant l'élève
                 $follows = $manager->getListByMainMaster($this->app->user()->getAttribute('user')->profession_id);
 
@@ -171,7 +171,7 @@ class FollowController extends BackController
 				if ($master_class ) {
 
 
-					$manager = $this->managers->getManagerOf('Follow');
+					$manager = $this->managers->getManagerOf('Comment');
 					// Récupère la liste de suivis concernant l'élève
 					$follows = $manager->getListByMaster($this->app->user()->getAttribute('user')->id());
 
@@ -183,7 +183,7 @@ class FollowController extends BackController
 					}
 					else if (($this->app->user()->getAttribute('group') == 10)) {
 
-					$manager = $this->managers->getManagerOf('Follow');
+					$manager = $this->managers->getManagerOf('Comment');
 					// Récupère la liste de suivis concernant l'élève
 					$follows = $manager->getListByMainMaster($this->app->user()->getAttribute('user')->profession_id);
 
@@ -231,9 +231,9 @@ class FollowController extends BackController
 
                         // Vérifie que la requête nous ait retourné quelque chose
                         if ($student) {
-                            // Récupère le manager du module Follow
-                            $follows_manager = $this->managers->getManagerOf('Follow');
-                            $follow = new Follow(array(
+                            // Récupère le manager du module Comment
+                            $follows_manager = $this->managers->getManagerOf('Comment');
+                            $follow = new Comment(array(
                                 'content' => $contentSpecial,
                                 'follow_type' => $request->postData('followType'),
                                 'right' => $request->postData('right'),
@@ -283,13 +283,13 @@ class FollowController extends BackController
 
              if ($boolEdit) {
 
-                 $followTypes = $this->managers->getManagerOf('Follow')->getFollowTypes();
+                 $followTypes = $this->managers->getManagerOf('Comment')->getFollowTypes();
                  $this->page()->addVar('followTypes', $followTypes);
 
                  // Supprime le template par defaut de la page
                  $this->page->setLayout();
 
-                 $manager = $this->managers->getManagerOf('Follow');
+                 $manager = $this->managers->getManagerOf('Comment');
                  $follow = $manager->getUnique($request->getData('id'));
 
                  // On vérifie que le suivi existe
@@ -333,7 +333,7 @@ class FollowController extends BackController
                                  //on change le flag du check de suivi
                                  $checked=(($is_master or false) ? 1 : 0);
 
-                                 $followUpdate = new Follow(array(
+                                 $followUpdate = new Comment(array(
                                      'id' => $request->getData('id'),
                                      'content' => $request->postData('content'),
                                      'follow_type' => $request->postData('followType'),
@@ -392,7 +392,7 @@ class FollowController extends BackController
 
              if ($boolVisible) {
 
-                 $follow = $this->managers->getManagerOf('Follow')->getUnique($request->getData('id'));
+                 $follow = $this->managers->getManagerOf('Comment')->getUnique($request->getData('id'));
 
                  // Récupère les infos de l'élève concerné par le suivi
                  $student = $this->managers->getManagerOf('Student')->getUnique($follow->student_id());
@@ -402,7 +402,7 @@ class FollowController extends BackController
 
                  //on met à jour le check comme quoi on a bien lu le suivi seulement si on est le maître de classe de l'élève
 				 if($is_master)
-					$success = $this->managers->getManagerOf('Follow')->updateIsChecked($follow, $is_master);
+					$success = $this->managers->getManagerOf('Comment')->updateIsChecked($follow, $is_master);
 
                  $this->page->addVar('follow', $follow);
 
@@ -442,7 +442,7 @@ class FollowController extends BackController
         if ($request->getExists('id')) {
 
             $idMasterClass = $request->getData('id');
-            $uncheckedFollow = $this->managers->getManagerOf('Follow')->getCountFollowUncheckedForMasterClassStudent($idMasterClass);
+            $uncheckedFollow = $this->managers->getManagerOf('Comment')->getCountFollowUncheckedForMasterClassStudent($idMasterClass);
 
             header("Content-Type: application/json", true);
         }
@@ -459,7 +459,7 @@ class FollowController extends BackController
                 // Récupère les droits de l'utilisateur
                 $right = $this->app->user()->getAttribute('right');
 
-    	 		$manager = $this->managers->getManagerOf('Follow');
+    	 		$manager = $this->managers->getManagerOf('Comment');
                 // Charge le manager des classes
                 $class_manager = $this->managers->getManagerOf('SchoolClass');
                 // Récupère la classe de l'utilisateur authentifié
@@ -533,7 +533,7 @@ class FollowController extends BackController
         // Récupère la ou les classes de l'utilisateur authentifié
         $master_classes = $this->managers->getManagerOf('SchoolClass')->getUniqueByColleague($this->app->user()->getAttribute('user')->id());
 
-        $manager = $this->managers->getManagerOf('Follow');
+        $manager = $this->managers->getManagerOf('Comment');
         $follow = $manager->getUnique($Id_Follow);
 
         // Récupère l'élève concerné par le suivi
@@ -587,7 +587,7 @@ class FollowController extends BackController
         // Récupère la ou les classes de l'utilisateur authentifié
         $master_classes = $this->managers->getManagerOf('SchoolClass')->getUniqueByColleague($this->app->user()->getAttribute('user')->id());
 
-        $manager = $this->managers->getManagerOf('Follow');
+        $manager = $this->managers->getManagerOf('Comment');
         $follow = $manager->getUnique($Id_Follow);
 
         // Récupère l'élève concerné par le suivi

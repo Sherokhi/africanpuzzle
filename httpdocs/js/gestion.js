@@ -156,6 +156,32 @@ function filter_Filleul(year, filtered)
 
 })();
 
+(function() {
+    'use strict';
+
+    $(viewPupils);
+
+    /* --------------------------------------------------------------------- */
+    /* --------------------Liste des filleuls -------------------------- */
+    /* --------------------------------------------------------------------- */
+    function viewPupils(){
+        $('#load-data-pupil').html(null);
+        $('.overlay-pupil').css('display','block');
+
+        $.ajax({
+            type:'POST',
+            url:'filleul/view',
+            dataType:'html',
+            data: 'view_all=true'
+        }).done(function(data){
+            $('.overlay-pupil').css('display','none');
+            $('#load-data-pupil').append(data);
+            datatablesRefresh('#datatable-pupils');
+        });
+    }
+
+})();
+
 /* ------------------------------------------------------------------- */
 /* --------------------Formate la datatable  ------------------------- */
 /* ------------------------------------------------------------------- */
@@ -568,6 +594,73 @@ function submit_add_pupil(){
     
     }
 
+
+/* --------------------------------------------------------
+ * *** 					add_pupil_comment  		    	 ***
+ * ---------------------------------------------------------
+ * ETML
+ * Auteur 		    : Jérémie Perret
+ * Date 		    : 27.02.2020
+ * Description 		: Ajout d'un commentaire pour un filleul
+ *                    le contenu html de la page addComment.php
+ *                    du module user s'insère dans
+ *                    la modal popup d'ajout
+ * -------------------------------------------------------- */
+function add_pupil_comment(idChild){
+
+    $('#pupil-modal').html(null);
+    $.ajax({
+        url:'filleul/'+idChild+'/comment/add',
+        dataType:'html',
+    }).done(function(html){
+        $('#pupil-modal').append(html);
+        $('#pupil-modal').modal("show");
+    });
+}
+
+/* --------------------------------------------------------
+ * *** 				submit_add_pupil_comment	    	 ***
+ * ---------------------------------------------------------
+ * ETML
+ * Auteur 		    : Jérémie Perret
+ * Date 		    : 27.02.2020
+ * Description 		: Ajout d'un commentaire pour un filleul
+ *                    le contenu html de la page addComment.php
+ *                    du module user s'insère dans
+ *                    la modal popup d'ajout
+ * -------------------------------------------------------- */
+function submit_add_pupil_comment(idChild){
+    // Fetch form to apply custom Bootstrap validation
+    formData = $('#commentPupil').serialize();
+
+    $.ajax({
+        type:"POST",
+        url:"filleul/"+idChild+"/comment/add_submit",
+        dataType:'json',
+        data : formData
+    }).done(function(data){
+        console.log(data);
+        // on vérifie qu'il n'y a pas d'erreurs
+        if ((!data.msgErr == ''))
+        {
+            Swal.fire(data.msgTitle, data.msgErr, 'error');
+
+            return;
+        }
+        else{
+            $('#pupil-modal').modal("hide");
+            var today = new Date();
+            filter_Filleul(today.getFullYear(), 1);
+            // Swal.fire('Ajout!', "Ouuuuuuaaaaaiiis", 'success');
+            Swal.fire('Ajout!', "<p> Le commentaire pour <em><strong class='text-warning'>"+ data.pupil + "</strong></em> a bien été ajouté !</p>", 'success');
+        }
+
+
+    }).fail(function (jqXHR, textStatus) {
+        Swal.fire('ERREUR!', textStatus, 'error');
+    });
+
+}
 
 /* *
  * ---------------------------------------------------------

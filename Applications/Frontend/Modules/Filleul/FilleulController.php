@@ -8,6 +8,7 @@
 
 namespace Applications\Frontend\Modules\Filleul;
 
+use Applications\Entities\Comment;
 use Library\Sly\Controller\BackController;
 use Library\Sly\Network\HTTPRequest;
 
@@ -32,6 +33,7 @@ class FilleulController extends BackController
         }
         return $pupils;
     }
+
     function getFiliationsPupils() {
         $pupils = $this->getPupils();
         foreach($pupils as $pupil)
@@ -137,6 +139,16 @@ class FilleulController extends BackController
     // Get and sort data for the main pupil page
     function executeIndex()
     {
+        $errors = array();
+
+        /* on vérifie qu'on a les bons droits .. c'est à dire qu'on fait partie du comité */
+        if (!($this->app->user()->isAuthenticated() and ($this->app->user()->getAttribute('isInCD')))){
+
+            $errors[0]="Vous nêtes pas autorisé à accéder à cette page !";
+            $this->app->user()->setFlash($errors,'danger','Droits ');
+            $this->app->httpResponse()->redirect($request->httpReferer());
+        }
+
         $this->applyInterfaceVars();
 
         $this->page->setLayout('gestion');
@@ -212,6 +224,86 @@ class FilleulController extends BackController
         }
         $this->page->setLayout();
         $this->page->setContentFile(__DIR__.DS.'Views'.DS.'filter.php');
+    }
+
+
+    // Execute the filters and sends the html data to the ajax function to update the page
+    public function executeView(HTTPRequest $request)
+    {
+
+        if($request->postExists('search'))
+        {
+            $search = $request->postData('search');
+        }
+        else
+        {
+            $search = "";
+        }
+
+        if($request->postExists('birthYear'))
+        {
+            $birthYear = $request->postData('birthYear');
+        }
+        else
+        {
+            $birthYear = "";
+        }
+
+        if($request->postExists('buiState'))
+        {
+            $buiState = $request->postData('buiState');
+        }
+        else
+        {
+            $buiState = "";
+        }
+
+        if($search !== '' && $buiState !== "" && $birthYear !== '') {
+            // Execute the query
+            $pupils = $this->managers->getManagerOf('Filleul')->getList();
+        }
+        else {
+            // Execute the query
+            $pupils = $this->managers->getManagerOf('Filleul')->filterList($search, $birthYear, $buiState);
+        }
+        // Sort pupils
+        if(!empty($pupils)) {
+            foreach ($pupils as $pupil) {
+                $filiationsArray[] = $pupil['filName'];
+            }
+
+            // Make sure filiations are unique
+            $filiations = array_unique($filiationsArray);
+            // Sort filiations costs
+            foreach ($filiations as $filiation) {
+                $totalTrainingCost = 0;
+                foreach ($pupils as $pupil) {
+                    if ($filiation == $pupil['filName']) {
+                        $totalTrainingCost += $pupil['traCost'];
+                    }
+                }
+                $trainingsCost[] = $totalTrainingCost;
+            }
+            // Filiation = Key, Cost = value
+            $filiations = array_combine($filiations, $trainingsCost);
+            // Sort pupils age instead of birth date
+            foreach ($pupils as $key => $value) {
+                $dateArray = explode("-", $value['chiBirthDate']); // aaaa - mm - dd
+                $chiYear = $dateArray[0];
+                $actualYear = date("Y");
+                $chiAge = $actualYear - $chiYear;
+
+                $pupils[$key]['chiAge'] = $chiAge;
+            }
+
+            // Pupils list
+            $this->page->addVar('pupils', $pupils);
+
+            // Filiations names
+            $this->page->addVar('filiations', $filiations);        // Do not use the template, only send $content
+        }
+        $this->page->setLayout();
+        $this->page->setContentFile(__DIR__.DS.'Views'.DS.'view.php');
     }
 
     // Get the data and set the modAddUpdatePupil modal
@@ -591,6 +683,46 @@ class FilleulController extends BackController
         $results['pupil']=$pupil['chiName']." ".$pupil['chiFirstName'];
         $results['totByFiliation']=$this->getTotByFiliations();
         $results['totByBuilding']=$this->getTotByBuildings();
+        die(json_encode($results));
+    }
+
+    public function executeAddComment(HTTPRequest $request)
+    {
+        $errors = array();
+
+        /* on vérifie qu'on a les bons droits .. c'est à dire qu'on fait partie du comité */
+        if (!($this->app->user()->isAuthenticated() and ($this->app->user()->getAttribute('isInCD')))){
+
+            $errors[0]="Vous nêtes pas autorisé à accéder à cette page !";
+            $this->app->user()->setFlash($errors,'danger','Droits ');
+            $this->app->httpResponse()->redirect($request->httpReferer());
+        }
+        $idChild = $request->getData('id');
+        $this->page->addVar('idChild', $idChild);
+        /* on affiche la page add.php  dans une popup modal */
+        $this->page->setLayout();
+    }
+
+    // Delete a pupil in the database
+    public function executeAddCommentSubmit(HTTPRequest $request)
+    {
+        $idChild = $request->getData('id');
+        $commentMsg = $request->postData('comment');
+        $commentManager = $this->managers->getManagerOf('Comment');
+        $filleulManager = $this->managers->getManagerOf('Filleul');
+        $comment  = new Comment();
+        $comment->setComment($commentMsg);
+        $comment->setStudent_id($idChild);
+        $comment->setColleague_id($this->app->user()->getAttribute('user')->idUser());
+
+        $pupil = $filleulManager->getPupildata($idChild);
+        $commentManager->add($comment);
+
+        $results=[];
+        $results['msgErr']='';
+        $results['msgTitle']="$commentMsg";
+        $results['pupil']=$pupil['chiName']." ".$pupil['chiFirstName'];
+
         die(json_encode($results));
     }
 }
