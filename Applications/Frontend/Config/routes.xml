@@ -49,6 +49,9 @@
     <!-- filleul filtered -->
     <route url="/filleul/filter" module="Filleul" action="filter" />
 
+    <!-- filleul filtered -->
+    <route url="/filleul/view" module="Filleul" action="view" />
+
      <!-- get filleul data -->
      <route url="/filleul/([0-9]+)" module="Filleul" action="getPupilData" vars="idPupil"/>
 
@@ -70,4 +73,10 @@
     <!-- delete filleul submit -->
     <route url="/filleul/([0-9]+)/submit_delete" module="Filleul" action="deleteSubmit" vars="id"/>
 
+    <!-- add comment -->
+    <route url="/filleul/([0-9]+)/comment/add" module="Filleul" action="addComment" vars="id"/>
+
+    <!-- add comment submit -->
+    <!-- WIP add idUser in url -->
+    <route url="/filleul/([0-9]+)/comment/add_submit" module="Filleul" action="addCommentSubmit" vars="id"/>
 </routes>
