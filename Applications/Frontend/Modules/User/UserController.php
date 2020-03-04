@@ -284,9 +284,6 @@ class UserController extends BackController
         } else {
             $filterUser=null;
         }
-
-        error_log("filterUser: ".$filterUser);
-
         $users = $this->managers->getManagerOf('User')->getlist($filterUser);
         
         $this->page->addVar('lstUsers', $users);

@@ -15,7 +15,7 @@ class FilleulManager_PDO extends FilleulManager
     public function getList() 
     {        
         // Query that returns all the pupils
-        $queryPupils ='SELECT t_child.idChild, t_child.chiName, t_child.chiFirstName, t_child.chiAddress, t_child.chiBirthDate, 
+        $queryPupils ='SELECT t_child.idChild, t_child.chiName, t_child.chiFirstName, t_child.chiAddress, t_child.chiParentsNames, t_child.chiBirthDate, 
         t_child.chiPicture, t_building.buiState, t_filiation.filName, t_training.traCost, t_user.useName, 
         t_user.useFirstName FROM t_child LEFT OUTER JOIN t_building ON t_child.fkBuilding = t_building.idBuilding 
         LEFT OUTER JOIN t_filiation ON t_child.fkFiliation = t_filiation.idFiliation LEFT OUTER JOIN t_training 
@@ -35,10 +35,10 @@ class FilleulManager_PDO extends FilleulManager
         $link = mysqli_connect(DB_HOST_MYSQLI, DB_USER, DB_PWD, DB_NAME);
         $search = mysqli_real_escape_string($link, $search);
         $birthYear= mysqli_real_escape_string($link, $birthYear);
-        $buiState= mysqli_real_escape_string($link, $buiState);
+        $buiState= $buiState ? mysqli_real_escape_string($link, $buiState) : '0 OR 1';
 
         // Query that returns the filtered pupils list
-        $filterQuery = "SELECT t_child.idChild, t_child.chiName, t_child.chiFirstName, t_child.chiAddress, t_child.chiBirthDate, 
+        $filterQuery = "SELECT t_child.idChild, t_child.chiName, t_child.chiFirstName, t_child.chiAddress, t_child.chiParentsNames, t_child.chiBirthDate, 
         t_child.chiPicture, t_building.buiState, t_filiation.filName, t_training.traCost, t_user.useName, t_user.useFirstName 
         FROM t_child LEFT OUTER JOIN t_building ON t_child.fkBuilding = t_building.idBuilding LEFT OUTER JOIN t_filiation ON 
         t_child.fkFiliation = t_filiation.idFiliation LEFT OUTER JOIN t_training ON t_child.fkTraining = t_training.idTraining 

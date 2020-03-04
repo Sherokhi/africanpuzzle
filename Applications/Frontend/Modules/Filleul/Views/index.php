@@ -16,7 +16,7 @@
             - modification, ajout et suppression d'un filleul 
             voir les méthodes dans gestion.js
 ------------------------------------------------------------------------------------  -->
-<div id="pupil-modal" class="modal fade " role="dialog" data-toggle="modal"></div>
+<div id="pupil-modal" class="modal fade" role="dialog" data-toggle="modal"></div>
 
 
 <!--  ------------------------------------------------------------------------------
@@ -104,6 +104,7 @@
                     
                     <div class="col-md-4 text-center pt-2">
 						<h2>Liste des filleuls</h2>
+                        <!-- WIP total of pupils -->
 						<p>( xxx )</p>
                     </div>
                     
@@ -160,6 +161,29 @@
     </div>
 </section>
 
+<div id="pupilViewContent">
+    <section class="section-liste-pupil">
+        <div class="container-fluid">
+            <div class="pupil_table_content"></div>
+
+            <div class="cardbox">
+                <div class="cardbox-heading">
+                    <div class="table-responsive bootgrid">
+
+                        <div class="overlay-pupil" style="display:none; font-size:36px; margin:5px; text-align:center;"><i class="fas fa-sync-alt fa-spin"></i></div>
+                        <!-- insertion de la liste des filleuls voir méthode filter_pupil dans gestion.js-->
+                        <div id="load-data-pupil"></div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+<!-- section: Table , liste des filleuls-->
+
+
+
 <div id="pupilContent" class="container-fluid pb-0">
 
 <?php
@@ -179,15 +203,15 @@ foreach($filiations as $filiation => $cost)
             <!-- COUNTER new row each 3 objects -->
             <div class="row">
                 <!-- OBJECT START -->
-                <?php 
+                <?php
                 foreach($pupils as $pupil)
                 {
-                    if($pupil['filName'] == $filiation) 
-                    {                   
+                    if($pupil['filName'] == $filiation)
+                    {
                 ?>
 
                         <div class="col-3">
-                            
+
                             <!-- pupil card -->
                             <div class="cardbox">
                                 <div class="pb-1 bg-gradient-primary top-line"></div>
@@ -196,13 +220,13 @@ foreach($filiations as $filiation => $cost)
                                     <div class="d-flex flex-wrap">
                                         <div class="has-badge">
                                             <sup class="badge bg-warning"><?= $pupil['chiBirthDate'] ?></sup>
-                                            <?php 
+                                            <?php
                                             // photo par défaut si pas trouvée
-                                            $photo= IMAGES_FOLDER.'no_photo.png'; 
-                                            
+                                            $photo= IMAGES_FOLDER.'no_photo.png';
+
                                             if (file_exists(WEBROOT.IMAGES_FOLDER.FOLDER_IMG_FILLEUL. $pupil['chiPicture'])){
-                                                $photo = IMAGES_FOLDER.FOLDER_IMG_FILLEUL. $pupil['chiPicture']; 
-                                            }   
+                                                $photo = IMAGES_FOLDER.FOLDER_IMG_FILLEUL. $pupil['chiPicture'];
+                                            }
                                             ?>
                                             <img class="shadow-z5 filleul-thumb rounded" src="<?php echo $this->html()->url($photo); ?>" alt="header-user-image">
                                         </div>
@@ -210,17 +234,17 @@ foreach($filiations as $filiation => $cost)
                                             <p class="my-1"><strong><?= $pupil['chiName'] . ' ' . $pupil['chiFirstName'] ?></strong></p><small><?= $pupil['chiAddress'] ?></small>
                                         </div>
                                         <div class="ml-auto mr-0 mt-0 mr-lg-auto ml-lg-0 mt-lg-4 ml-xl-auto mr-xl-0 mt-xl-0"><span class="budget p-2 badge badge-primary"><?= $pupil['traCost'] . ".-" ?></span><h3>
-                                        <?php 
+                                        <?php
                                             // 0 -> private; 1 -> public
-                                            if($pupil['buiState'] == 0) 
+                                            if($pupil['buiState'] == 0)
                                             {
                                                 echo '<i class="fas fa-university  text-warning" title="Privé"></i>';
                                             }
-                                            else 
+                                            else
                                             {
                                                 echo '<i class="fas fa-school text-warning" title="Public"></i>';
                                             }
-                                        ?>                                        
+                                        ?>
                                         </h3></div>
                                     </div>
                                 </div>
@@ -228,27 +252,27 @@ foreach($filiations as $filiation => $cost)
                                 <div class="cardbox-footer">
                                         <!-- START dropdown-->
                                         <div class="float-right dropdown">
-                                            <i class="far fa-comment width-30 height-30 f-s-20 text-center ico-crud" onclick="setPupil(<?= $pupil['idChild'] ?>, 2)"  title="Ajouter un commentaire" style="line-height: 30px"></i>
+                                            <i class="far fa-comment width-30 height-30 f-s-20 text-center ico-crud" onclick="add_pupil_comment(<?= $pupil['idChild'] ?>,<?php echo $this->app->user()->getAttribute('user')->idUser(); ?>)"  title="Ajouter un commentaire" style="line-height: 30px"></i>
                                             <i class="fas fa-edit width-30 height-30 f-s-20 text-center ico-crud" onclick="edit_pupil(<?= $pupil['idChild'] ?>, 0)" title="Modifier" style="line-height: 30px"></i>
                                             <i class="far fa-trash-alt width-30 height-30 f-s-20 text-center ico-crud" onclick="delete_pupil(<?= $pupil['idChild'] ?>)" title="Supprimer"  style="line-height: 30px"></i>
-                                        </div> 
+                                        </div>
                                         <!-- END dropdown-->
 
                                     <p class="mb-0"><small><em class="ion-record text-danger mr-2"></em></small><small class="text-muted"><strong class="mr-2">
-                                    <?php 
+                                    <?php
                                         // If the pupil has no sponsor
-                                        if(empty($pupil['useName']) && empty($pupil['useFirstName'])) 
+                                        if(empty($pupil['useName']) && empty($pupil['useFirstName']))
                                         {
                                             echo "Sans parrain";
                                         }
-                                        else 
+                                        else
                                         {
-                                            echo $pupil['useName'] . " " . $pupil['useFirstName']; 
+                                            echo $pupil['useName'] . " " . $pupil['useFirstName'];
                                         }
                                     ?>
                                     </strong></small></p>
                                 </div>
-                            
+
                             </div>
                             <!-- end of pupil card -->
                         </div>
