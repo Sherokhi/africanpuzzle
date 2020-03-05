@@ -51,9 +51,9 @@ function filter_Filleul(year, filtered)
                     "buiState" : buiState
                 }
         }).done(function(data){
-                $("#pupilContent").html(data);
+                $("#load-data-pupil").html(data);
         });
-
+        datatablesRefresh('#datatable-pupils');
     }
     else if (filtered == 1)
     {
@@ -67,11 +67,11 @@ function filter_Filleul(year, filtered)
         var skip = true;
         if (typeof filter[3] !== 'undefined') {
             optradio = 'all';
-            skip = false;
-
+        //     skip = false;
+        //
         } else if(typeof filter[2] !== 'undefined'){
-            optradio = filter[2].name;            
-            skip = false;
+            optradio = filter[2].name;
+        //     skip = false;
         }
 
         switch(optradio)
@@ -109,24 +109,23 @@ function filter_Filleul(year, filtered)
         {
             buiState = "0 OR 1";
         }
-        
+
         $.ajax({
             type : "POST",
             dataType : "html",
-            url : "filleul/filter",
-            data : 
+            url : "filleul/view",
+            data :
                 {
                     "search" : search,
                     "birthYear" : birthYear,
                     "buiState" : buiState
                 }
         }).done(function(data){
-            if(skip){
-                data = null;
-            }
-                $("#pupilContent").html(data);
+            $("#load-data-pupil").html(data);
+            datatablesRefresh('#datatable-pupils');
+
         });
-    }  
+    }
 }
 
 

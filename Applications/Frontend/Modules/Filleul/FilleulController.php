@@ -153,80 +153,6 @@ class FilleulController extends BackController
 
         $this->page->setLayout('gestion');
     }
-
-    // Execute the filters and sends the html data to the ajax function to update the page
-    public function executeFilter(HTTPRequest $request)
-    {
-
-        if($request->postExists('search'))
-        {
-            $search = $request->postData('search');
-        }
-        else
-        {
-            $search = "";
-        }
-
-        if($request->postExists('birthYear'))
-        {
-            $birthYear = $request->postData('birthYear');
-        }
-        else
-        {
-            $birthYear = "";
-        }
-
-        if($request->postExists('buiState'))
-        {
-            $buiState = $request->postData('buiState');
-        }
-        else
-        {
-            $buiState = "";
-        }
-        // Execute the query
-        $pupils = $this->managers->getManagerOf('Filleul')->filterList($search, $birthYear, $buiState);
-        // Sort pupils
-        if(!empty($pupils)) {
-            foreach ($pupils as $pupil) {
-                $filiationsArray[] = $pupil['filName'];
-            }
-
-            // Make sure filiations are unique
-            $filiations = array_unique($filiationsArray);
-            // Sort filiations costs
-            foreach ($filiations as $filiation) {
-                $totalTrainingCost = 0;
-                foreach ($pupils as $pupil) {
-                    if ($filiation == $pupil['filName']) {
-                        $totalTrainingCost += $pupil['traCost'];
-                    }
-                }
-                $trainingsCost[] = $totalTrainingCost;
-            }
-            // Filiation = Key, Cost = value
-            $filiations = array_combine($filiations, $trainingsCost);
-            // Sort pupils age instead of birth date
-            foreach ($pupils as $key => $value) {
-                $dateArray = explode("-", $value['chiBirthDate']); // aaaa - mm - dd
-                $chiYear = $dateArray[0];
-                $actualYear = date("Y");
-                $chiAge = $actualYear - $chiYear;
-
-                $pupils[$key]['chiBirthDate'] = $chiAge;
-            }
-
-            // Pupils list
-            $this->page->addVar('pupils', $pupils);
-
-            // Filiations names
-            $this->page->addVar('filiations', $filiations);        // Do not use the template, only send $content
-        }
-        $this->page->setLayout();
-        $this->page->setContentFile(__DIR__.DS.'Views'.DS.'filter.php');
-    }
-
-
     // Execute the filters and sends the html data to the ajax function to update the page
     public function executeView(HTTPRequest $request)
     {
@@ -723,6 +649,53 @@ class FilleulController extends BackController
         $results['msgTitle']="$commentMsg";
         $results['pupil']=$pupil['chiName']." ".$pupil['chiFirstName'];
 
+        die(json_encode($results));
+    }
+
+    // Add display to submit a pupil
+    function executeUpdateComment(HTTPRequest $request) {
+        $errors = array();
+
+        /* on vérifie qu'on a les bons droits .. c'est à dire qu'on fait partie du comité */
+        if (!($this->app->user()->isAuthenticated() and ($this->app->user()->getAttribute('isInCD')))){
+
+            $errors[0]="Vous nêtes pas autorisé à accéder à cette page !";
+            $this->app->user()->setFlash($errors,'danger','Droits ');
+            $this->app->httpResponse()->redirect($request->httpReferer());
+        }
+        $comment = $this->managers->getManagerOf('Comment')->getUnique($request->getData('id'));
+        $this->page->addVar('comment', $comment);
+        /* on affiche la page updateComment.php  dans une popup modal */
+        $this->page->setLayout();
+    }
+    // Update a pupil in the database
+    public function executeUpdateCommentSubmit(HTTPRequest $request)
+    {
+        $errors = array();
+        /* on vérifie qu'on a les bons droits .. c'est à dire qu'on fait partie du comité */
+        if (!($this->app->user()->isAuthenticated() and ($this->app->user()->getAttribute('isInCD')))){
+
+            $errors[0]="Vous nêtes pas autorisé à accéder à cette page !";
+            $this->app->user()->setFlash($errors,'danger','Droits ');
+            $this->app->httpResponse()->redirect($request->httpReferer());
+        }
+
+        // le retour de l'appel Ajax
+        $results=[];
+        $results['msgErr']='';
+        $results['msgTitle']='';
+
+
+        if ($request->postExists("commentData")){
+            $commentData =  json_decode($request->postData("commentData"));
+            $update = new Comment();
+            $update->setComment($commentData);
+            $update->setId($request->getData('id'));
+            // Add the pupil to the database
+            $this->managers->getManagerOf('Comment')->update();
+            $results['comment']=$this->getTotByFiliations();
+            $results['totByBuilding']=$this->getTotByBuildings();
+        }
         die(json_encode($results));
     }
 }

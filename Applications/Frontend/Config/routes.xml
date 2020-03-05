@@ -47,9 +47,6 @@
     <route url="/filleul" module="Filleul" action="index" />
 
     <!-- filleul filtered -->
-    <route url="/filleul/filter" module="Filleul" action="filter" />
-
-    <!-- filleul filtered -->
     <route url="/filleul/view" module="Filleul" action="view" />
 
      <!-- get filleul data -->
