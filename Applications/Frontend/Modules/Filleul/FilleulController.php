@@ -17,6 +17,9 @@ class FilleulController extends BackController
     function getPupils() {
         return $this->managers->getManagerOf('Filleul')->getList();
     }
+    function getFiliations() {
+        return $this->managers->getManagerOf('Filiation')->getList();
+    }
 
     function getPupilsWithAge() {
         $pupils = $this->getPupils();
@@ -130,7 +133,7 @@ class FilleulController extends BackController
         $this->page->addVar('pupils', $pupils);
 
         // Filiations names
-        $this->page->addVar('filiations', $filiations);
+        $this->page->addVar('filiations', $this->getFiliations());
 
         //Total in buildings
         $this->page->addVar('buildings', $buildings);
@@ -157,15 +160,6 @@ class FilleulController extends BackController
     public function executeView(HTTPRequest $request)
     {
 
-        if($request->postExists('search'))
-        {
-            $search = $request->postData('search');
-        }
-        else
-        {
-            $search = "";
-        }
-
         if($request->postExists('birthYear'))
         {
             $birthYear = $request->postData('birthYear');
@@ -181,17 +175,20 @@ class FilleulController extends BackController
         }
         else
         {
-            $buiState = "";
+            $buiState = "0 OR 1";
         }
 
-        if($search !== '' && $buiState !== "" && $birthYear !== '') {
-            // Execute the query
-            $pupils = $this->managers->getManagerOf('Filleul')->getList();
+        if($request->postExists('filName'))
+        {
+            $filName = $request->postData('filName');
         }
-        else {
-            // Execute the query
-            $pupils = $this->managers->getManagerOf('Filleul')->filterList($search, $birthYear, $buiState);
+        else
+        {
+            $filName = "0 OR 1";
         }
+
+        // Execute the query
+        $pupils = $this->managers->getManagerOf('Filleul')->filterList($filName, $birthYear, $buiState);
         // Sort pupils
         if(!empty($pupils)) {
             foreach ($pupils as $pupil) {

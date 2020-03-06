@@ -35,65 +35,71 @@ function filter_Filleul(year, filtered)
     if(filtered == 0)
     {
         // Set all pupil query
-        var search = "";
         var birthYear = "";
-        var buiState = 'undefined';
+        var buiState = '0 OR 1';
+        var filName = "primaire OR t_filiation.filName = secondaire";
         // var buiState = "0 OR 1";
-        
+
         $.ajax({
             type : "POST",
             dataType : "html",
-            url : "pupil/filter",
-            data : 
+            url : "filleul/view",
+            data :
                 {
-                    "search" : search,
                     "birthYear" : birthYear,
-                    "buiState" : buiState
+                    "buiState" : buiState,
+                    "filName" : filName
                 }
         }).done(function(data){
-                $("#load-data-pupil").html(data);
+            $("#load-data-pupil").html(data);
+            datatablesRefresh('#datatable-pupils');
         });
-        datatablesRefresh('#datatable-pupils');
     }
     else if (filtered == 1)
     {
         // Get the filter data
         var filter = $('#searchPupilForm').serializeArray();
 
-        var search = filter[0].value;
-        var age = Number(filter[1].value);
+        var age = Number(filter[0].value);
         var birthYear = year - age;
-        var buiState = 0;
-        var skip = true;
-        if (typeof filter[3] !== 'undefined') {
-            optradio = 'all';
-        //     skip = false;
-        //
-        } else if(typeof filter[2] !== 'undefined'){
-            optradio = filter[2].name;
-        //     skip = false;
+        var buiState = undefined;
+        var filName = undefined;
+        var buiFilters = [];
+        var filFilters = [];
+        for (item in filter) {
+            if(filter[item].name == 'prive' || filter[item].name == 'public'){
+                buiFilters.push(filter[item].name);
+            }
+            if(filter[item].name == 'primaire' || filter[item].name == 'secondaire'){
+                filFilters.push(filter[item].name);
+            }
         }
 
-        switch(optradio)
-        {
-            case "private" :
-                buiState = "0";
-                break;
-            case "public" :
-                buiState = "1";
-                break;
-            case "all" :
-                buiState = "2";
-                break;
+        if(buiFilters.length == 2){
+            buiState = 2;
         }
-
+        else {
+            switch(buiFilters[0])
+            {
+                case "prive" :
+                    buiState = "0";
+                    break;
+                case "public" :
+                    buiState = "1";
+                    break;
+                default :
+                    buiState = undefined;
+                    break;
+            }
+        }
+        if(filFilters.length == 2){
+            filName = filFilters[0]+' OR t_filiation.filName ='+filFilters[1];
+        }
+        else {
+            filName = filFilters[0];
+        }
         // Check types and values of the filters
         // Set null to wrong filters
-
-        if(typeof search == 'undefined')
-        {
-            search = null;
-        }
 
         // If birthYear is not defined, the age hasn't been entered or the value is not a number
         if(typeof birthYear == 'undefined' || birthYear == year || isNaN(age))
@@ -110,15 +116,20 @@ function filter_Filleul(year, filtered)
             buiState = "0 OR 1";
         }
 
+
+        if(typeof filName == 'undefined')
+        {
+            filName = null;
+        }
         $.ajax({
             type : "POST",
             dataType : "html",
             url : "filleul/view",
             data :
                 {
-                    "search" : search,
                     "birthYear" : birthYear,
-                    "buiState" : buiState
+                    "buiState" : buiState,
+                    "filName" : filName
                 }
         }).done(function(data){
             $("#load-data-pupil").html(data);
@@ -166,12 +177,10 @@ function filter_Filleul(year, filtered)
     function viewPupils(){
         $('#load-data-pupil').html(null);
         $('.overlay-pupil').css('display','block');
-
         $.ajax({
             type:'POST',
             url:'filleul/view',
-            dataType:'html',
-            data: 'view_all=true'
+            data : 'html'
         }).done(function(data){
             $('.overlay-pupil').css('display','none');
             $('#load-data-pupil').append(data);
@@ -638,7 +647,6 @@ function submit_add_pupil_comment(idChild){
         dataType:'json',
         data : formData
     }).done(function(data){
-        console.log(data);
         // on vérifie qu'il n'y a pas d'erreurs
         if ((!data.msgErr == ''))
         {

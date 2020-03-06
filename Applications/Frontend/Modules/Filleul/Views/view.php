@@ -11,7 +11,7 @@
 <tr>
     <th data-column-id="name">Filleul</th>
     <th data-column-id="parents">Parents</th>
-    <th data-column-id="age">Age</th>
+    <th data-column-id="age">Niveau scolaire</th>
     <th data-column-id="birthdate">Date de naissance</th>
     <th data-column-id="commands"></th>
 </tr>
@@ -19,6 +19,9 @@
 
 <tbody>
 <?php
+if(!isset($pupils)){
+    $pupils = [];
+}
 foreach($pupils as $pupil) {
     ?>
     <!-- HTML CODE -->
@@ -50,7 +53,7 @@ foreach($pupils as $pupil) {
         </td>
 
         <td class="text-left">
-            <p class="my-1"><?= $pupil['chiAge'] ?></p>
+            <p class="my-1"><?= $pupil['filName'] ?></p>
         </td>
 
         <td class="text-left"><?= $pupil['chiBirthDate'] ?></td>

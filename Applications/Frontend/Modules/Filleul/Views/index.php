@@ -121,17 +121,6 @@
             <div class="cardbox-body">
                 <form id="searchPupilForm">
                     <div class="row">
-                        <div class="col-md-2 offset-md-1">
-                            <div class="form-group">
-                                <div class="input-group">
-                                    <input id="searchPupil" class="form-control" type="text" placeholder="Recherche ..." name="search" oninput="filter_Filleul(<?= date('Y') ?>, 1)">
-                                    <span class="input-group-text" >
-                                        <i class="ion-search" data-pack="default"></i>
-                                    </span>
-                                </div>
-                            </div>                 
-                        </div>
-
                         <div class="col-md-2">
                             <div class="form-group">                                                               
                                 <div class="input-group">
@@ -154,13 +143,24 @@
                                 <input type="checkbox" id="chk-is-public" checked="checked" name="public" onclick="filter_Filleul(<?= date('Y') ?>, 1)"><span></span>
                             </label>Public                    
                         </div>
+
+                        <div class="col-md-2 offset-md-1">
+                            <label class="switch switch-warning">
+                                <input type="checkbox"  id="chk-is-primaire" checked="checked" name="primaire" onclick="filter_Filleul(<?= date('Y') ?>, 1)"><span></span>
+                            </label>Primaire
+                        </div>
+
+                        <div class="col-md-2">
+                            <label class="switch switch-warning">
+                                <input type="checkbox" id="chk-is-secondaire" checked="checked" name="secondaire" onclick="filter_Filleul(<?= date('Y') ?>, 1)"><span></span>
+                            </label>Secondaire
+                        </div>
                     </div>            
                 </form>
             </div>
         </div>
     </div>
 </section>
-
 <div id="pupilViewContent">
     <section class="section-liste-pupil">
         <div class="container-fluid">
