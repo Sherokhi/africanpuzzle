@@ -232,8 +232,8 @@ function datatablesRefresh(idTableToRefrech) {
                 "sInfoFiltered":   "(filtré de _MAX_  éléments au total)",
                 "sInfoPostFix":    "",
                 "sLoadingRecords": "Chargement en cours...",
-                "sZeroRecords":    "Aucun  él ément  à afficher",
-                "sEmptyTable":     "Aucune donn ée disponible dans le tableau. Arr ête d\'être con",
+                "sZeroRecords":    "Aucun  élément  à afficher",
+                "sEmptyTable":     "Aucune donnée disponible dans le tableau.",
                 "oPaginate": {
                     "sFirst":      "Premier",
                     "sPrevious":   "Précédent",
