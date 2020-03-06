@@ -225,24 +225,24 @@ function datatablesRefresh(idTableToRefrech) {
             // Text translation options
             // Note the required keywords between underscores (e.g _MENU_)
             oLanguage: {"sProcessing":     "Traitement en cours...",
-                "sSearch":         "Rechercher&nbsp;:",
-                "sLengthMenu":     "Afficher&nbsp;  _MENU_ &eacute;l&eacute;ments &nbsp;",
-                "sInfo":           "Affichage de l'&eacute;l&eacute;ment _START_ &agrave; _END_ sur _TOTAL_ &eacute;l&eacute;ments",
-                "sInfoEmpty":      "Affichage de l'&eacute;l&eacute;ment 0 &agrave; 0 sur 0 &eacute;l&eacute;ment",
-                "sInfoFiltered":   "(filtr&eacute; de _MAX_ &eacute;l&eacute;ments au total)",
+                "sSearch":         "Rechercher :",
+                "sLengthMenu":     "Afficher   _MENU_  éléments  ",
+                "sInfo":           "Affichage de l' élément _START_  à _END_ sur _TOTAL_  éléments",
+                "sInfoEmpty":      "Affichage de l' élément 0  à 0 sur 0  élément",
+                "sInfoFiltered":   "(filtré de _MAX_  éléments au total)",
                 "sInfoPostFix":    "",
                 "sLoadingRecords": "Chargement en cours...",
-                "sZeroRecords":    "Aucun &eacute;l&eacute;ment &agrave; afficher",
-                "sEmptyTable":     "Aucune donn&eacute;e disponible dans le tableau",
+                "sZeroRecords":    "Aucun  él ément  à afficher",
+                "sEmptyTable":     "Aucune donn ée disponible dans le tableau. Arr ête d\'être con",
                 "oPaginate": {
                     "sFirst":      "Premier",
-                    "sPrevious":   "Pr&eacute;c&eacute;dent",
+                    "sPrevious":   "Précédent",
                     "sNext":       "Suivant",
                     "sLast":       "Dernier"
                 },
                 "oAria": {
                     "sSortAscending":  ": activer pour trier la colonne par ordre croissant",
-                    "sSortDescending": ": activer pour trier la colonne par ordre d&eacute;croissant"
+                    "sSortDescending": ": activer pour trier la colonne par ordre d écroissant"
                 },
                 "select": {
                         "rows": {
