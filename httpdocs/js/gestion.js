@@ -38,7 +38,6 @@ function filter_Filleul(year, filtered)
         var birthYear = "";
         var buiState = '0 OR 1';
         var filName = "primaire OR t_filiation.filName = secondaire";
-        // var buiState = "0 OR 1";
 
         $.ajax({
             type : "POST",
@@ -82,10 +81,10 @@ function filter_Filleul(year, filtered)
             switch(buiFilters[0])
             {
                 case "prive" :
-                    buiState = "0";
+                    buiState = "1";
                     break;
                 case "public" :
-                    buiState = "1";
+                    buiState = "0";
                     break;
                 default :
                     buiState = undefined;

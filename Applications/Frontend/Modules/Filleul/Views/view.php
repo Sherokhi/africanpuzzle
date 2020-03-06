@@ -12,7 +12,7 @@
     <th data-column-id="name">Filleul</th>
     <th data-column-id="parents">Parents</th>
     <th data-column-id="age">Niveau scolaire</th>
-    <th data-column-id="birthdate">Date de naissance</th>
+    <th data-column-id="birthdate">Établissement</th>
     <th data-column-id="commands"></th>
 </tr>
 </thead>
@@ -56,7 +56,7 @@ foreach($pupils as $pupil) {
             <p class="my-1"><?= $pupil['filName'] ?></p>
         </td>
 
-        <td class="text-left"><?= $pupil['chiBirthDate'] ?></td>
+        <td class="text-left"><?= $pupil['buiState'] == FIL_PRIVE ? 'Privé' : 'Public' ?></td>
 
         <td class="text-left">
 

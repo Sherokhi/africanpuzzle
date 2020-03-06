@@ -14,18 +14,21 @@ use Library\Sly\Network\HTTPRequest;
 
 class FilleulController extends BackController
 {
-    function getPupils() {
+    function getPupils()
+    {
         return $this->managers->getManagerOf('Filleul')->getList();
     }
-    function getFiliations() {
+
+    function getFiliations()
+    {
         return $this->managers->getManagerOf('Filiation')->getList();
     }
 
-    function getPupilsWithAge() {
+    function getPupilsWithAge()
+    {
         $pupils = $this->getPupils();
         // Get pupils ages instead of birthdate
-        foreach($pupils as $key => $value)
-        {
+        foreach ($pupils as $key => $value) {
             $dateArray = explode("-", $value['chiBirthDate']); // aaaa - mm - dd
             $chiYear = $dateArray[0];
             $actualYear = date("Y");
@@ -37,10 +40,10 @@ class FilleulController extends BackController
         return $pupils;
     }
 
-    function getFiliationsPupils() {
+    function getFiliationsPupils()
+    {
         $pupils = $this->getPupils();
-        foreach($pupils as $pupil)
-        {
+        foreach ($pupils as $pupil) {
             $filiationsArray[] = $pupil['filName'];
         }
 
@@ -49,11 +52,11 @@ class FilleulController extends BackController
         return $filiations;
     }
 
-    function getBuildingsPupils() {
+    function getBuildingsPupils()
+    {
         $pupils = $this->getPupils();
 
-        foreach($pupils as $pupil)
-        {
+        foreach ($pupils as $pupil) {
             $buildingArray[] = $pupil['buiState'];
         }
 
@@ -62,16 +65,15 @@ class FilleulController extends BackController
         return $buildings;
     }
 
-    function getFiliationsTotalTrainingCost() {
+    function getFiliationsTotalTrainingCost()
+    {
         $filiations = $this->getFiliationsPupils();
         $pupils = $this->getPupils();
-        foreach($filiations as $filiation)
-        {
+        foreach ($filiations as $filiation) {
             $totalTrainingCost = 0;
-            foreach($pupils as $pupil)
-            {
+            foreach ($pupils as $pupil) {
                 // If the pupil is in the filiation
-                if($filiation == $pupil['filName']){
+                if ($filiation == $pupil['filName']) {
                     $totalTrainingCost += $pupil['traCost']; // Add its training cost
                 }
             }
@@ -84,30 +86,29 @@ class FilleulController extends BackController
         return $filiations;
     }
 
-    function getTotByFiliations() {
-        $totByFiliation=array();
+    function getTotByFiliations()
+    {
+        $totByFiliation = array();
 
         // total par filiation
         $nbrByFiliation = $this->managers->getManagerOf('Filleul')->getTotByFiliation();
-        foreach($nbrByFiliation as $key => $value)
-        {
-            $totByFiliation[$key] =  $value;
+        foreach ($nbrByFiliation as $key => $value) {
+            $totByFiliation[$key] = $value;
 
         }
         return $totByFiliation;
     }
 
-    function getTotByBuildings() {
+    function getTotByBuildings()
+    {
         $pupils = $this->getPupils();
         $buildings = $this->getBuildingsPupils();
         // Set each values foreach buidings
-        foreach($buildings as $building)
-        {
+        foreach ($buildings as $building) {
             $totalTotInBuilding = 0;
-            foreach($pupils as $pupil)
-            {
+            foreach ($pupils as $pupil) {
                 // If the pupil is in the filiation
-                if($building == $pupil['buiState']){
+                if ($building == $pupil['buiState']) {
                     $totalTotInBuilding++; // Add its training cost
                 }
             }
@@ -119,8 +120,8 @@ class FilleulController extends BackController
     }
 
 
-
-    function applyInterfaceVars() {
+    function applyInterfaceVars()
+    {
         $totByFiliation = $this->getTotByFiliations();
         $pupils = $this->getPupilsWithAge();
         $buildings = $this->getTotByBuildings();
@@ -145,10 +146,10 @@ class FilleulController extends BackController
         $errors = array();
 
         /* on vérifie qu'on a les bons droits .. c'est à dire qu'on fait partie du comité */
-        if (!($this->app->user()->isAuthenticated() and ($this->app->user()->getAttribute('isInCD')))){
+        if (!($this->app->user()->isAuthenticated() and ($this->app->user()->getAttribute('isInCD')))) {
 
-            $errors[0]="Vous nêtes pas autorisé à accéder à cette page !";
-            $this->app->user()->setFlash($errors,'danger','Droits ');
+            $errors[0] = "Vous nêtes pas autorisé à accéder à cette page !";
+            $this->app->user()->setFlash($errors, 'danger', 'Droits ');
             $this->app->httpResponse()->redirect($request->httpReferer());
         }
 
@@ -156,41 +157,33 @@ class FilleulController extends BackController
 
         $this->page->setLayout('gestion');
     }
+
     // Execute the filters and sends the html data to the ajax function to update the page
     public function executeView(HTTPRequest $request)
     {
 
-        if($request->postExists('birthYear'))
-        {
+        if ($request->postExists('birthYear')) {
             $birthYear = $request->postData('birthYear');
-        }
-        else
-        {
+        } else {
             $birthYear = "";
         }
 
-        if($request->postExists('buiState'))
-        {
+        if ($request->postExists('buiState')) {
             $buiState = $request->postData('buiState');
-        }
-        else
-        {
+        } else {
             $buiState = "0 OR 1";
         }
 
-        if($request->postExists('filName'))
-        {
+        if ($request->postExists('filName')) {
             $filName = $request->postData('filName');
-        }
-        else
-        {
+        } else {
             $filName = "0 OR 1";
         }
 
         // Execute the query
         $pupils = $this->managers->getManagerOf('Filleul')->filterList($filName, $birthYear, $buiState);
         // Sort pupils
-        if(!empty($pupils)) {
+        if (!empty($pupils)) {
             foreach ($pupils as $pupil) {
                 $filiationsArray[] = $pupil['filName'];
             }
@@ -215,9 +208,9 @@ class FilleulController extends BackController
                 $chiYear = $dateArray[0];
                 $actualYear = date("Y");
                 $chiAge = $actualYear - $chiYear;
-
                 $pupils[$key]['chiAge'] = $chiAge;
             }
+
 
             // Pupils list
             $this->page->addVar('pupils', $pupils);
@@ -226,18 +219,15 @@ class FilleulController extends BackController
             $this->page->addVar('filiations', $filiations);        // Do not use the template, only send $content
         }
         $this->page->setLayout();
-        $this->page->setContentFile(__DIR__.DS.'Views'.DS.'view.php');
+        $this->page->setContentFile(__DIR__ . DS . 'Views' . DS . 'view.php');
     }
 
     // Get the data and set the modAddUpdatePupil modal
     public function executeGetPupilData(HTTPRequest $request)
     {
-        if($request->getExists('idPupil'))
-        {
+        if ($request->getExists('idPupil')) {
             $idPupil = $request->getData('idPupil');
-        }
-        else
-        {
+        } else {
             $idPupil = "";
         }
 
@@ -247,14 +237,15 @@ class FilleulController extends BackController
     }
 
     // Add display to submit a pupil
-    function executeAdd(HTTPRequest $request) {
+    function executeAdd(HTTPRequest $request)
+    {
         $errors = array();
 
         /* on vérifie qu'on a les bons droits .. c'est à dire qu'on fait partie du comité */
-        if (!($this->app->user()->isAuthenticated() and ($this->app->user()->getAttribute('isInCD')))){
-            
-            $errors[0]="Vous nêtes pas autorisé à accéder à cette page !";
-            $this->app->user()->setFlash($errors,'danger','Droits ');
+        if (!($this->app->user()->isAuthenticated() and ($this->app->user()->getAttribute('isInCD')))) {
+
+            $errors[0] = "Vous nêtes pas autorisé à accéder à cette page !";
+            $this->app->user()->setFlash($errors, 'danger', 'Droits ');
             $this->app->httpResponse()->redirect($request->httpReferer());
         }
         $users = $this->managers->getManagerOf('User')->getList();
@@ -267,35 +258,34 @@ class FilleulController extends BackController
         $this->page->addVar('buildings', $buildings);
 
         /* on affiche la page add.php  dans une popup modal */
-            $this->page->setLayout();
+        $this->page->setLayout();
     }
 
     // Add a pupil to the database
     public function executeAddSubmit(HTTPRequest $request)
     {
-        
+
         $errors = array();
         /* on vérifie qu'on a les bons droits .. c'est à dire qu'on fait partie du comité */
-        if (!($this->app->user()->isAuthenticated() and ($this->app->user()->getAttribute('isInCD')))){
-            
-            $errors[0]="Vous nêtes pas autorisé à accéder à cette page !";
-            $this->app->user()->setFlash($errors,'danger','Droits ');
+        if (!($this->app->user()->isAuthenticated() and ($this->app->user()->getAttribute('isInCD')))) {
+
+            $errors[0] = "Vous nêtes pas autorisé à accéder à cette page !";
+            $this->app->user()->setFlash($errors, 'danger', 'Droits ');
             $this->app->httpResponse()->redirect($request->httpReferer());
         }
 
         // le retour de l'appel Ajax
-        $results=[];
-        $results['msgErr']='';
-        $results['msgTitle']='';
-        
-        
-        if ($request->postExists("pupilData")){
-            $pupilData =  json_decode($request->postData("pupilData"));
+        $results = [];
+        $results['msgErr'] = '';
+        $results['msgTitle'] = '';
+
+
+        if ($request->postExists("pupilData")) {
+            $pupilData = json_decode($request->postData("pupilData"));
             $photoName = "x";
-            if ($request->postExists('pupilPhoto'))
-            {
+            if ($request->postExists('pupilPhoto')) {
                 $pupilPhoto = $request->postData('pupilPhoto');
-                if( substr($pupilPhoto, 0, 4) !=="http"){
+                if (substr($pupilPhoto, 0, 4) !== "http") {
 
                     $dataPhoto = $pupilPhoto;
 
@@ -306,114 +296,88 @@ class FilleulController extends BackController
                     $dataPhoto = base64_decode($image_array_2[1]);
 
                     $photoName = time() . '.png';
-                    if ($photoName!=null){
+                    if ($photoName != null) {
 
                         //on place la photo dans le répertoire des utilisateurs
-                        file_put_contents(IMAGES_FOLDER.FOLDER_IMG_FILLEUL.$photoName, $dataPhoto);
+                        file_put_contents(IMAGES_FOLDER . FOLDER_IMG_FILLEUL . $photoName, $dataPhoto);
                     }
                 }
 
             }
-            if(isset($pupilData->name))
-            {
+            if (isset($pupilData->name)) {
                 $name = $pupilData->name;
-            }
-            else
-            {
+            } else {
                 $name = "";
             }
 
-            if(isset($pupilData->firstName))
-            {
+            if (isset($pupilData->firstName)) {
                 $firstName = $pupilData->firstName;
-            }
-            else
-            {
+            } else {
                 $firstName = "";
             }
 
-            if(isset($pupilData->address))
-            {
+            if (isset($pupilData->address)) {
                 $address = $pupilData->address;
-            }
-            else
-            {
+            } else {
                 $address = "";
             }
 
-            if(isset($pupilData->dadsName, $pupilData->mothersName))
-            {
-                $parentsName = $pupilData->dadsName.';'.$pupilData->mothersName;
-            }
-            else
-            {
+            if (isset($pupilData->dadsName, $pupilData->mothersName)) {
+                $parentsName = $pupilData->dadsName . ';' . $pupilData->mothersName;
+            } else {
                 $parentsName = "";
             }
 
-            if(isset($pupilData->birthDate))
-            {
+            if (isset($pupilData->birthDate)) {
                 $birthDate = $pupilData->birthDate;
-            }
-            else
-            {
+            } else {
                 $birthDate = "";
             }
 
-            if(isset($pupilData->sponsor))
-            {
+            if (isset($pupilData->sponsor)) {
                 $sponsor = $pupilData->sponsor;
-            }
-            else
-            {
+            } else {
                 $sponsor = "";
             }
 
-            if(isset($pupilData->building))
-            {
+            if (isset($pupilData->building)) {
                 $building = $pupilData->building;
-            }
-            else
-            {
+            } else {
                 $building = "";
             }
 
-            if(isset($pupilData->filiation))
-            {
+            if (isset($pupilData->filiation)) {
                 $filiation = $pupilData->filiation;
-            }
-            else
-            {
+            } else {
                 $filiation = "";
             }
 
-            if(isset($pupilData->training))
-            {
+            if (isset($pupilData->training)) {
                 $training = $pupilData->training;
-            }
-            else
-            {
+            } else {
                 $training = "";
             }
 
 
             // Add the pupil to the database
-            $this->managers->getManagerOf('Filleul')->addPupil($name, $firstName, $address, $parentsName, $birthDate, $photoName,$building, $filiation, $training, $sponsor);
-            $results['totByFiliation']=$this->getTotByFiliations();
-            $results['totByBuilding']=$this->getTotByBuildings();
+            $this->managers->getManagerOf('Filleul')->addPupil($name, $firstName, $address, $parentsName, $birthDate, $photoName, $building, $filiation, $training, $sponsor);
+            $results['totByFiliation'] = $this->getTotByFiliations();
+            $results['totByBuilding'] = $this->getTotByBuildings();
         }
 
         die(json_encode($results));
     }
 
     // Add display to submit a pupil
-    function executeUpdate(HTTPRequest $request) {
+    function executeUpdate(HTTPRequest $request)
+    {
         $errors = array();
 
         /* on vérifie qu'on a les bons droits .. c'est à dire qu'on fait partie du comité */
-        if (!($this->app->user()->isAuthenticated() and ($this->app->user()->getAttribute('isInCD')))){
+        if (!($this->app->user()->isAuthenticated() and ($this->app->user()->getAttribute('isInCD')))) {
 
-            $errors[0]="Vous nêtes pas autorisé à accéder à cette page !";
-            $this->app->user()->setFlash($errors,'danger','Droits ');
+            $errors[0] = "Vous nêtes pas autorisé à accéder à cette page !";
+            $this->app->user()->setFlash($errors, 'danger', 'Droits ');
             $this->app->httpResponse()->redirect($request->httpReferer());
         }
         $users = $this->managers->getManagerOf('User')->getList();
@@ -429,31 +393,31 @@ class FilleulController extends BackController
         /* on affiche la page add.php  dans une popup modal */
         $this->page->setLayout();
     }
+
     // Update a pupil in the database
     public function executeUpdateSubmit(HTTPRequest $request)
     {
         $errors = array();
         /* on vérifie qu'on a les bons droits .. c'est à dire qu'on fait partie du comité */
-        if (!($this->app->user()->isAuthenticated() and ($this->app->user()->getAttribute('isInCD')))){
+        if (!($this->app->user()->isAuthenticated() and ($this->app->user()->getAttribute('isInCD')))) {
 
-            $errors[0]="Vous nêtes pas autorisé à accéder à cette page !";
-            $this->app->user()->setFlash($errors,'danger','Droits ');
+            $errors[0] = "Vous nêtes pas autorisé à accéder à cette page !";
+            $this->app->user()->setFlash($errors, 'danger', 'Droits ');
             $this->app->httpResponse()->redirect($request->httpReferer());
         }
 
         // le retour de l'appel Ajax
-        $results=[];
-        $results['msgErr']='';
-        $results['msgTitle']='';
+        $results = [];
+        $results['msgErr'] = '';
+        $results['msgTitle'] = '';
 
 
-        if ($request->postExists("pupilData")){
-            $pupilData =  json_decode($request->postData("pupilData"));
+        if ($request->postExists("pupilData")) {
+            $pupilData = json_decode($request->postData("pupilData"));
             $photoName = "x";
-            if ($request->postExists('pupilPhoto'))
-            {
+            if ($request->postExists('pupilPhoto')) {
                 $pupilPhoto = $request->postData('pupilPhoto');
-                if( substr($pupilPhoto, 0, 4) !== "http"){
+                if (substr($pupilPhoto, 0, 4) !== "http") {
 
                     $dataPhoto = $pupilPhoto;
 
@@ -465,125 +429,95 @@ class FilleulController extends BackController
 
                     $photoName = time() . '.png';
 
-                    if ($photoName!=null){
+                    if ($photoName != null) {
                         //on place la photo dans le répertoire des utilisateurs
-                        file_put_contents(IMAGES_FOLDER.FOLDER_IMG_FILLEUL.$photoName, $dataPhoto);
+                        file_put_contents(IMAGES_FOLDER . FOLDER_IMG_FILLEUL . $photoName, $dataPhoto);
                     }
-                }
-                else {
+                } else {
                     $photoLinkParts = explode('/', $pupilPhoto);
                     $photoName = end($photoLinkParts);
                 }
 
             }
-            if($request->postExists("idPupil"))
-            {
+            if ($request->postExists("idPupil")) {
                 $id = $request->postData('idPupil');
-            }
-            else
-            {
+            } else {
                 $id = "";
             }
-            if(isset($pupilData->name))
-            {
+            if (isset($pupilData->name)) {
                 $name = $pupilData->name;
-            }
-            else
-            {
+            } else {
                 $name = "";
             }
 
-            if(isset($pupilData->firstName))
-            {
+            if (isset($pupilData->firstName)) {
                 $firstName = $pupilData->firstName;
-            }
-            else
-            {
+            } else {
                 $firstName = "";
             }
 
-            if(isset($pupilData->address))
-            {
+            if (isset($pupilData->address)) {
                 $address = $pupilData->address;
-            }
-            else
-            {
+            } else {
                 $address = "";
             }
 
-            if(isset($pupilData->dadsName, $pupilData->mothersName))
-            {
-                $parentsName = $pupilData->dadsName.';'.$pupilData->mothersName;
-            }
-            else
-            {
+            if (isset($pupilData->dadsName, $pupilData->mothersName)) {
+                $parentsName = $pupilData->dadsName . ';' . $pupilData->mothersName;
+            } else {
                 $parentsName = "";
             }
 
-            if(isset($pupilData->birthDate))
-            {
+            if (isset($pupilData->birthDate)) {
                 $birthDate = $pupilData->birthDate;
-            }
-            else
-            {
+            } else {
                 $birthDate = "";
             }
 
-            if(isset($pupilData->sponsor))
-            {
+            if (isset($pupilData->sponsor)) {
                 $sponsor = $pupilData->sponsor;
-            }
-            else
-            {
+            } else {
                 $sponsor = "";
             }
 
-            if(isset($pupilData->building))
-            {
+            if (isset($pupilData->building)) {
                 $building = $pupilData->building;
-            }
-            else
-            {
+            } else {
                 $building = "";
             }
 
-            if(isset($pupilData->filiation))
-            {
+            if (isset($pupilData->filiation)) {
                 $filiation = $pupilData->filiation;
-            }
-            else
-            {
+            } else {
                 $filiation = "";
             }
 
-            if(isset($pupilData->training))
-            {
+            if (isset($pupilData->training)) {
                 $training = $pupilData->training;
-            }
-            else
-            {
+            } else {
                 $training = "";
             }
             // Add the pupil to the database
-            $this->managers->getManagerOf('Filleul')->updatePupil($id, $name, $firstName, $address, $parentsName, $birthDate, $photoName,$building, $filiation, $training, $sponsor);
-            $results['totByFiliation']=$this->getTotByFiliations();
-            $results['totByBuilding']=$this->getTotByBuildings();
+            $this->managers->getManagerOf('Filleul')->updatePupil($id, $name, $firstName, $address, $parentsName, $birthDate, $photoName, $building, $filiation, $training, $sponsor);
+            $results['totByFiliation'] = $this->getTotByFiliations();
+            $results['totByBuilding'] = $this->getTotByBuildings();
         }
         die(json_encode($results));
     }
 
-    function executeDelete(HTTPRequest $request) {
+    function executeDelete(HTTPRequest $request)
+    {
         $errors = array();
 
         /* on vérifie qu'on a les bons droits .. c'est à dire qu'on fait partie du comité */
-        if (!($this->app->user()->isAuthenticated() and ($this->app->user()->getAttribute('isInCD')))){
+        if (!($this->app->user()->isAuthenticated() and ($this->app->user()->getAttribute('isInCD')))) {
 
-            $errors[0]="Vous nêtes pas autorisé à accéder à cette page !";
-            $this->app->user()->setFlash($errors,'danger','Droits ');
+            $errors[0] = "Vous nêtes pas autorisé à accéder à cette page !";
+            $this->app->user()->setFlash($errors, 'danger', 'Droits ');
             $this->app->httpResponse()->redirect($request->httpReferer());
         }
 
-        $pupilId=$request->getData('id');
+        $pupilId = $request->getData('id');
 
         $manager = $this->managers->getManagerOf('Filleul');
         $pupil = $manager->getPupildata($pupilId);
@@ -591,6 +525,7 @@ class FilleulController extends BackController
 
         $this->page->setLayout();
     }
+
     // Delete a pupil in the database
     public function executeDeleteSubmit(HTTPRequest $request)
     {
@@ -598,14 +533,14 @@ class FilleulController extends BackController
         $manager = $this->managers->getManagerOf('Filleul');
         $pupil = $manager->getPupildata($id);
 
-        $results=[];
+        $results = [];
 
         $this->page->addVar('pupil', $pupil);
         $this->managers->getManagerOf('Filleul')->deletePupil($id);
 
-        $results['pupil']=$pupil['chiName']." ".$pupil['chiFirstName'];
-        $results['totByFiliation']=$this->getTotByFiliations();
-        $results['totByBuilding']=$this->getTotByBuildings();
+        $results['pupil'] = $pupil['chiName'] . " " . $pupil['chiFirstName'];
+        $results['totByFiliation'] = $this->getTotByFiliations();
+        $results['totByBuilding'] = $this->getTotByBuildings();
         die(json_encode($results));
     }
 
@@ -614,10 +549,10 @@ class FilleulController extends BackController
         $errors = array();
 
         /* on vérifie qu'on a les bons droits .. c'est à dire qu'on fait partie du comité */
-        if (!($this->app->user()->isAuthenticated() and ($this->app->user()->getAttribute('isInCD')))){
+        if (!($this->app->user()->isAuthenticated() and ($this->app->user()->getAttribute('isInCD')))) {
 
-            $errors[0]="Vous nêtes pas autorisé à accéder à cette page !";
-            $this->app->user()->setFlash($errors,'danger','Droits ');
+            $errors[0] = "Vous nêtes pas autorisé à accéder à cette page !";
+            $this->app->user()->setFlash($errors, 'danger', 'Droits ');
             $this->app->httpResponse()->redirect($request->httpReferer());
         }
         $idChild = $request->getData('id');
@@ -633,7 +568,7 @@ class FilleulController extends BackController
         $commentMsg = $request->postData('comment');
         $commentManager = $this->managers->getManagerOf('Comment');
         $filleulManager = $this->managers->getManagerOf('Filleul');
-        $comment  = new Comment();
+        $comment = new Comment();
         $comment->setComment($commentMsg);
         $comment->setStudent_id($idChild);
         $comment->setColleague_id($this->app->user()->getAttribute('user')->idUser());
@@ -641,23 +576,24 @@ class FilleulController extends BackController
         $pupil = $filleulManager->getPupildata($idChild);
         $commentManager->add($comment);
 
-        $results=[];
-        $results['msgErr']='';
-        $results['msgTitle']="$commentMsg";
-        $results['pupil']=$pupil['chiName']." ".$pupil['chiFirstName'];
+        $results = [];
+        $results['msgErr'] = '';
+        $results['msgTitle'] = "$commentMsg";
+        $results['pupil'] = $pupil['chiName'] . " " . $pupil['chiFirstName'];
 
         die(json_encode($results));
     }
 
     // Add display to submit a pupil
-    function executeUpdateComment(HTTPRequest $request) {
+    function executeUpdateComment(HTTPRequest $request)
+    {
         $errors = array();
 
         /* on vérifie qu'on a les bons droits .. c'est à dire qu'on fait partie du comité */
-        if (!($this->app->user()->isAuthenticated() and ($this->app->user()->getAttribute('isInCD')))){
+        if (!($this->app->user()->isAuthenticated() and ($this->app->user()->getAttribute('isInCD')))) {
 
-            $errors[0]="Vous nêtes pas autorisé à accéder à cette page !";
-            $this->app->user()->setFlash($errors,'danger','Droits ');
+            $errors[0] = "Vous nêtes pas autorisé à accéder à cette page !";
+            $this->app->user()->setFlash($errors, 'danger', 'Droits ');
             $this->app->httpResponse()->redirect($request->httpReferer());
         }
         $comment = $this->managers->getManagerOf('Comment')->getUnique($request->getData('id'));
@@ -665,33 +601,34 @@ class FilleulController extends BackController
         /* on affiche la page updateComment.php  dans une popup modal */
         $this->page->setLayout();
     }
+
     // Update a pupil in the database
     public function executeUpdateCommentSubmit(HTTPRequest $request)
     {
         $errors = array();
         /* on vérifie qu'on a les bons droits .. c'est à dire qu'on fait partie du comité */
-        if (!($this->app->user()->isAuthenticated() and ($this->app->user()->getAttribute('isInCD')))){
+        if (!($this->app->user()->isAuthenticated() and ($this->app->user()->getAttribute('isInCD')))) {
 
-            $errors[0]="Vous nêtes pas autorisé à accéder à cette page !";
-            $this->app->user()->setFlash($errors,'danger','Droits ');
+            $errors[0] = "Vous nêtes pas autorisé à accéder à cette page !";
+            $this->app->user()->setFlash($errors, 'danger', 'Droits ');
             $this->app->httpResponse()->redirect($request->httpReferer());
         }
 
         // le retour de l'appel Ajax
-        $results=[];
-        $results['msgErr']='';
-        $results['msgTitle']='';
+        $results = [];
+        $results['msgErr'] = '';
+        $results['msgTitle'] = '';
 
 
-        if ($request->postExists("commentData")){
-            $commentData =  json_decode($request->postData("commentData"));
+        if ($request->postExists("commentData")) {
+            $commentData = json_decode($request->postData("commentData"));
             $update = new Comment();
             $update->setComment($commentData);
             $update->setId($request->getData('id'));
             // Add the pupil to the database
             $this->managers->getManagerOf('Comment')->update();
-            $results['comment']=$this->getTotByFiliations();
-            $results['totByBuilding']=$this->getTotByBuildings();
+            $results['comment'] = $this->getTotByFiliations();
+            $results['totByBuilding'] = $this->getTotByBuildings();
         }
         die(json_encode($results));
     }
