@@ -184,6 +184,7 @@ class FilleulController extends BackController
         $pupils = $this->managers->getManagerOf('Filleul')->filterList($filName, $birthYear, $buiState);
         // Sort pupils
         if (!empty($pupils)) {
+            $commentsManager = $this->managers->getManagerOf('Comment');
             foreach ($pupils as $pupil) {
                 $filiationsArray[] = $pupil['filName'];
             }
@@ -209,6 +210,7 @@ class FilleulController extends BackController
                 $actualYear = date("Y");
                 $chiAge = $actualYear - $chiYear;
                 $pupils[$key]['chiAge'] = $chiAge;
+                $pupils[$key]['comments'] = $commentsManager->getListByStudent($value['idChild']);
             }
 
 

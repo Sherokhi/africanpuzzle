@@ -9,10 +9,10 @@ class CommentManager_PDO extends CommentManager
     public function getListByStudent($student_id) {
         $req = $this->dao->prepare('SELECT * FROM t_comment
                                   WHERE t_comment.fkChild = :id
-                                  ORDER BY add_date DESC');
+                                  ORDER BY comDate DESC');
         $req->bindValue(':id', $student_id);
         $req->execute();
-        $req->setFetchMode(\PDO::FETCH_CLASS | \PDO::FETCH_PROPS_LATE, '\Applications\Entities\Comment');
+//        $req->setFetchMode(\PDO::FETCH_CLASS | \PDO::FETCH_PROPS_LATE, '\Applications\Entities\Comment');
 
         $comments = $req->fetchAll();
         $req->closeCursor();

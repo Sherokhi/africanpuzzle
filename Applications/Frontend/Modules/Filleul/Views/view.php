@@ -11,6 +11,7 @@
 <tr>
     <th data-column-id="name">Filleul</th>
     <th data-column-id="parents">Parents</th>
+    <th data-column-id="parents">Commentaies</th>
     <th data-column-id="age">Niveau scolaire</th>
     <th data-column-id="birthdate">Établissement</th>
     <th data-column-id="commands"></th>
@@ -50,6 +51,18 @@ foreach($pupils as $pupil) {
                 <?php $parents = explode(";",$pupil['chiParentsNames']) ?>
                 <?= $parents[0] ?> et <?= $parents[1] ?>
             </div>
+        </td>
+
+        <td>
+            <?php
+                foreach
+                ($pupil['comments'] as $comment) {
+            ?>
+            <p><textarea><?php $text = str_replace("\\r\\n", "&#13;&#10;", $comment['comComment']); echo($text); ?></textarea></p>
+            <hr>
+            <?php
+                }
+            ?>
         </td>
 
         <td class="text-left">
